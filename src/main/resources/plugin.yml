@@ -1,0 +1,5 @@
+name: RealisticGrowth
+version: '${project.version}'
+website: https://github.com/cyklon73
+main: de.cyklon.realisticgrowth.RealisticGrowth
+api-version: 1.21
