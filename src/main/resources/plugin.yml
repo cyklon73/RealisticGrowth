@@ -3,3 +3,8 @@ version: '${project.version}'
 website: https://github.com/cyklon73
 main: de.cyklon.realisticgrowth.RealisticGrowth
 api-version: 1.21
+
+permissions:
+  rg.update-msg:
+    description: Receives update messages
+    default: op
