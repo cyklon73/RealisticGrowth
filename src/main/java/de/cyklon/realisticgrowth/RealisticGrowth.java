@@ -15,6 +15,7 @@ import java.util.Random;
 public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     private Map<Material, GroundCheck> saplings;
+    private Map<Material, SaplingData> saplings;
     private Map<Material, Material> replaces;
 
     private FileConfiguration config;
@@ -40,7 +41,9 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         if (replant_chance != 1 && replant_chance != 0) random = new Random();
 
 
-        put(GroundCheck.checkTreeGround(), Material.OAK_SAPLING, Material.BIRCH_SAPLING, Material.SPRUCE_SAPLING, Material.JUNGLE_SAPLING, Material.ACACIA_SAPLING, Material.DARK_OAK_SAPLING);
+        put(GroundCheck.checkTreeGround(), Material.OAK_SAPLING, Material.BIRCH_SAPLING, Material.ACACIA_SAPLING);
+
+        put(GroundCheck.checkTreeGround(), GroundCheck.checkLargeTreeGround(), Material.SPRUCE_SAPLING, Material.JUNGLE_SAPLING, Material.DARK_OAK_SAPLING);
 
         put(GroundCheck.checkMangroveGround(), Material.MANGROVE_PROPAGULE);
 
@@ -75,11 +78,15 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
     }
 
     private void put(GroundCheck check, Material... types) {
+        put(check, null, types);
+    }
+
+    private void put(GroundCheck check, GroundCheck largeCheck, Material... types) {
         for (Material type : types) {
             String key = type.getKey().getKey();
             if (config.getBoolean("replant." + key, true)) {
                 getLogger().config("Replanting " + key + " enabled");
-                saplings.put(type, check);
+                saplings.put(type, new SaplingData(type, largeCheck!=null, largeCheck, check));
             } else getLogger().config("Replanting " + key + " disabled");
         }
     }
