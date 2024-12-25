@@ -2,14 +2,16 @@ package de.cyklon.realisticgrowth;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.type.Snow;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class GroundCheck {
 
-	private Predicate<Location> check;
 	private BiPredicate<GroundCheck, Location> check;
+	private LargeField field;
 
 	private GroundCheck(BiPredicate<GroundCheck, Location> check) {
 		this.check = check;
@@ -67,7 +69,6 @@ public class GroundCheck {
 	}
 
 	public static GroundCheck checkBelow(Material... material) {
-		return new GroundCheck(l -> Arrays.asList(material).contains(l.getBlock().getType()));
 		return new GroundCheck((gc, l) -> Arrays.asList(material).contains(l.getBlock().getType()));
 	}
 
