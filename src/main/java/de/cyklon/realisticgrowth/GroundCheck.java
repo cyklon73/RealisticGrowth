@@ -105,6 +105,10 @@ public class GroundCheck {
 		return checkBelow(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL, Material.MOSS_BLOCK, Material.MYCELIUM);
 	}
 
+	public static GroundCheck checkLargeFlowerGround() {
+		return checkFlowerGround().and((gc, l) -> l.clone().add(0, 2, 0).getBlock().getType().equals(Material.AIR));
+	}
+
 	public static GroundCheck checkMushroomGround() {
 		return checkBelow(Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM);
 	}
