@@ -6,7 +6,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Snow;
 
 import java.util.Arrays;
-import java.util.function.Predicate;
+import java.util.List;
+import java.util.function.BiPredicate;
 
 public class GroundCheck {
 
