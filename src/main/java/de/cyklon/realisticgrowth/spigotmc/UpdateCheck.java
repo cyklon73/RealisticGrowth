@@ -1,9 +1,9 @@
 package de.cyklon.realisticgrowth.spigotmc;
 
 import de.cyklon.realisticgrowth.RealisticGrowth;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -24,8 +24,8 @@ public class UpdateCheck {
 
 	public static void getVersion(Plugin plugin, Consumer<String> consumer) {
 		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-			try (InputStream in = new URL(API_URL + "/~").openStream(); Scanner reader = new Scanner(in)) {
-				if (reader.hasNext()) consumer.accept(reader.next());
+			try (InputStream in = new URL(API_URL + "/~").openStream(); Scanner scanner = new Scanner(in)) {
+				if (scanner.hasNext()) consumer.accept(scanner.next());
 			} catch (IOException e) {
 				plugin.getLogger().info("Unable to check for updates: " + e.getMessage());
 			}
@@ -37,18 +37,25 @@ public class UpdateCheck {
 			String currentVersion = plugin.getDescription().getVersion();
 			if (!version.equals(currentVersion)) {
 				BaseComponent[] components = new ComponentBuilder(RealisticGrowth.PREFIX + " Update available!\n")
-						.append("Current Version: ").color(net.md_5.bungee.api.ChatColor.GOLD)
-								.append(currentVersion).color(net.md_5.bungee.api.ChatColor.RED)
-								.append("New Version: ").color(net.md_5.bungee.api.ChatColor.GOLD)
-								.append(version).color(net.md_5.bungee.api.ChatColor.GREEN)
-								.append("\nNew Version available on ").color(net.md_5.bungee.api.ChatColor.RESET)
-								.append("[SpigotMC]").color(net.md_5.bungee.api.ChatColor.YELLOW).event(new ClickEvent(ClickEvent.Action.OPEN_URL, DOWNLOAD_URL)).create();
+						.append(RealisticGrowth.PREFIX + " Current Version: ").color(ChatColor.GOLD)
+								.append(currentVersion).color(ChatColor.RED)
+								.append("\n" + RealisticGrowth.PREFIX + " New Version: ").color(ChatColor.GOLD)
+								.append(version).color(ChatColor.GREEN)
+								.append("\n" + RealisticGrowth.PREFIX + " New Version available on ")
+								.append("[SpigotMC]").color(ChatColor.YELLOW)
+						.event(new ClickEvent(ClickEvent.Action.OPEN_URL, DOWNLOAD_URL))
+						.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new ComponentBuilder("Realistic ").color(ChatColor.GREEN)
+								.append("Growth").color(ChatColor.AQUA)
+								.append(" | ").color(ChatColor.GRAY)
+								.append("SpigotMC").color(ChatColor.GOLD)
+								.create())))
+						.create();
 
+				Bukkit.getConsoleSender().spigot().sendMessage(components);
 				Bukkit.getOnlinePlayers().forEach(p -> {
-					if (p.hasPermission("update-msg")) p.spigot().sendMessage(components);
+					if (p.hasPermission("rg.update-msg")) p.spigot().sendMessage(components);
 				});
 			}
 		});
 	}
-
 }
