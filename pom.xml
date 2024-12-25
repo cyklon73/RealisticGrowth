@@ -6,7 +6,7 @@
 
     <groupId>de.cyklon</groupId>
     <artifactId>RealisticGrowth</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>RealisticGrowth</name>
