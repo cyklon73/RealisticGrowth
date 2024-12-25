@@ -110,7 +110,8 @@ public class GroundCheck {
 	}
 
 	public static GroundCheck checkMushroomGround() {
-		return checkBelow(Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM);
+		return checkBelow(Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM)
+				.and((gc, l) -> l.getBlock().getLightLevel() <= 12);
 	}
 
 	public static GroundCheck checkNetherGround() {
