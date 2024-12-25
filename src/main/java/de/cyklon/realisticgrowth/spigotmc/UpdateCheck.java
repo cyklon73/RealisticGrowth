@@ -24,7 +24,7 @@ public class UpdateCheck {
 
 	public static void getVersion(Plugin plugin, Consumer<String> consumer) {
 		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-			try (InputStream in = new URL(API_URL + "/~").openStream(); Scanner scanner = new Scanner(in)) {
+			try (InputStream in = new URL(API_URL).openStream(); Scanner scanner = new Scanner(in)) {
 				if (scanner.hasNext()) consumer.accept(scanner.next());
 			} catch (IOException e) {
 				plugin.getLogger().info("Unable to check for updates: " + e.getMessage());
