@@ -1,6 +1,11 @@
+# If true checks on every start/reload for new plugin version and announce players with the 'update-msg' permission
 check-updates: true
+
+# The chance that a sapling is replanted instead of despawn
+# value between 0-100%
 replant-chance: 90
 
+# You can deactivate certain plants for automatic replanting if you set the plant to false
 replant:
   oak_sapling: true
   birch_sapling: true
