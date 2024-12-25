@@ -1,6 +1,8 @@
 package de.cyklon.realisticgrowth;
 
+import de.cyklon.realisticgrowth.spigotmc.UpdateCheck;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,6 +18,8 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 public final class RealisticGrowth extends JavaPlugin implements Listener {
+
+    public static final String PREFIX = "%s[%sRealistic %sGrowth%s]%s".formatted(ChatColor.GOLD, ChatColor.GREEN, ChatColor.AQUA, ChatColor.GOLD, ChatColor.RESET);
 
     private static final String UPPER = "[half=upper]";
 
@@ -39,13 +43,14 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         this.config = getConfig();
 
+        if (config.getBoolean("check-updates", true)) UpdateCheck.checkUpdate(this);
+
         this.replant_chance = config.getInt("replant-chance", 90)/100d;
 
         if (replant_chance > 1) replant_chance = 1;
         if (replant_chance < 0) replant_chance = 0;
 
         if (replant_chance != 1 && replant_chance != 0) random = new Random();
-
 
         put(GroundCheck.checkTreeGround(), Material.OAK_SAPLING, Material.BIRCH_SAPLING, Material.ACACIA_SAPLING);
 
