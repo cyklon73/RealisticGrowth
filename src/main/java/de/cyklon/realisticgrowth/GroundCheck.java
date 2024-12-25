@@ -9,8 +9,9 @@ import java.util.function.Predicate;
 public class GroundCheck {
 
 	private Predicate<Location> check;
+	private BiPredicate<GroundCheck, Location> check;
 
-	private GroundCheck(Predicate<Location> check) {
+	private GroundCheck(BiPredicate<GroundCheck, Location> check) {
 		this.check = check;
 	}
 
@@ -33,7 +34,7 @@ public class GroundCheck {
 
 	public static GroundCheck checkCactusGround() {
 		return checkBelow(Material.SAND, Material.RED_SAND)
-				.and(l -> checkAround(Material.AIR).test(l.clone().add(0, 1, 0)));
+				.and((gc, l) -> checkAround(Material.AIR).test(gc, l.clone().add(0, 1, 0)));
 	}
 
 	public static GroundCheck checkFlowerGround() {
@@ -50,12 +51,12 @@ public class GroundCheck {
 
 	public static GroundCheck checkCoralGround() {
 		return checkBelow(Material.SAND, Material.RED_SAND, Material.GRAVEL)
-				.and(l -> checkAround(Material.WATER).test(l.clone().add(0, 1, 0)));
+				.and((gc, l) -> checkAround(Material.WATER).test(gc, l.clone().add(0, 1, 0)));
 	}
 
 
-	private static Predicate<Location> checkAround(Material material) {
-		return l -> {
+	private static BiPredicate<GroundCheck, Location> checkAround(Material material) {
+		return (gc, l) -> {
 			Material m1 = l.clone().add(1, 0, 0).getBlock().getType();
 			Material m2 = l.clone().add(0, 0, 1).getBlock().getType();
 			Material m3 = l.clone().subtract(1, 0, 0).getBlock().getType();
@@ -67,14 +68,20 @@ public class GroundCheck {
 
 	public static GroundCheck checkBelow(Material... material) {
 		return new GroundCheck(l -> Arrays.asList(material).contains(l.getBlock().getType()));
+		return new GroundCheck((gc, l) -> Arrays.asList(material).contains(l.getBlock().getType()));
+	}
+
+	private boolean checkTargetBlock(Block block) {
+		if (block.getBlockData() instanceof Snow snow && snow.getLayers() <= 1) return true;
+		return Arrays.asList(Material.AIR, Material.SHORT_GRASS, Material.TALL_GRASS, Material.FERN, Material.LARGE_FERN).contains(block.getType());
 	}
 
 	public boolean check(Location location) {
 		location = location.clone();
-		return location.getBlock().getType().equals(Material.AIR) && check.test(location.subtract(0, 1, 0));
+		return checkTargetBlock(location.getBlock()) && check.test(this, location.subtract(0, 1, 0));
 	}
 
-	private GroundCheck and(Predicate<Location> check) {
+	private GroundCheck and(BiPredicate<GroundCheck, Location> check) {
 		this.check = this.check.and(check);
 		return this;
 	}
