@@ -6,7 +6,7 @@
 
     <groupId>de.cyklon</groupId>
     <artifactId>RealisticGrowth</artifactId>
-    <version>1.1.2</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>RealisticGrowth</name>
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.21.3-R0.1-SNAPSHOT</version>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
