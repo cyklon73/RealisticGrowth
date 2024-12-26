@@ -10,26 +10,53 @@ Configurable Planting Chance: The plugin offers full configurability, allowing y
 # Supported Plants and Their Planting Grounds:
 - Tree Saplings:
 
-  -  Oak Sapling: Can be planted on Dirt, Grass Block, Coarse Dirt, Podzol, Moss Block, Mycelium, and Rooted Dirt.
-  -  Birch Sapling: Can be planted on similar blocks as Oak Sapling.
-  -  Spruce Sapling: Can be planted on the same blocks as Oak Sapling.
-  -  Jungle Sapling: Can be planted on the same blocks as Oak Sapling.
-  -  Acacia Sapling: Can be planted on the same blocks as Oak Sapling.
-  -  Dark Oak Sapling: Requires 2x2 space to grow, but can be planted on the same blocks as Oak Sapling.
-  -  Mangrove Propagule: Can be planted on Dirt, Grass Block, Coarse Dirt, Podzol, Mycelium, and Rooted Dirt.
-
+  -  Oak Sapling
+  -  Birch Sapling
+  -  Acacia Sapling
+  -  Spruce Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
+  -  Jungle Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
+  -  Dark Oak Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
+  -  Mangrove Propagule
 
 - Crops & Seeds:
 
-  -  Wheat Seeds: Can be planted on Farmland.
-  -  Beetroot Seeds: Can be planted on Farmland.
-  -  Pumpkin Seeds: Can be planted on Grass Block or Farmland.
-  -  Melon Seeds: Can be planted on Grass Block or Farmland.
-  -  Sweet Berries: Can be planted on Grass Block, Dirt, Coarse Dirt, or Podzol.
+  -  Wheat Seeds
+  -  Beetroot Seeds
+  -  Pumpkin Seeds
+  -  Melon Seeds
+  -  Sweet Berries
+ 
+- Flowers:
+
+  -  Dandelion
+  -  Poppy
+  -  Blue Orchid
+  -  Allium
+  -  Red / Orange / White / Pink Tulip
+  -  Oxeye Daisy
+  -  Cornflower
+  -  Lily of the Valley
+  -  Wither Rose
+  -  Sunflower
+  -  Lilac
+  -  Rose bush
+  -  Peony
 
 - Other Plants:
 
-  -  Bamboo: Can be planted on Dirt, Grass Block, Coarse Dirt, Podzol, Sand, Red Sand, Mud, Mycelium, and Rooted Dirt.
-  -  Sugar Cane: Can be planted on Grass Block, Dirt, Coarse Dirt, Podzol, Sand, Red Sand, and Mud.
-  -  Cactus: Can be planted on Sand and Red Sand.
-  -  Flowers: Can be planted on Grass Block, Dirt, Coarse Dirt, Podzol, Moss Block, and Mycelium.
+  -  Bamboo
+  -  Sugar Cane
+  -  Cactus
+  -  (Large) Fern
+  -  (Tall) Grass
+  -  Red / Brown Mushroom
+  -  Crimson / Warped Fungus
+  -  Crimson / Warped Roots
+  -  Pumpkin Seeds
+  -  Melon Seeds
+  -  Sweet Berries
+  -  Dead Coral Fan (All types)
+  -  Wheat seeds
+  -  Beetroot seeds
+  -  Potato
+  -  Carrot
