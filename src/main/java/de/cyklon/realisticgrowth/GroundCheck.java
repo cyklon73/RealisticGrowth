@@ -1,7 +1,5 @@
 package de.cyklon.realisticgrowth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -160,8 +158,6 @@ public class GroundCheck {
 		return field;
 	}
 
-	@Getter
-	@AllArgsConstructor
 	public static class LargeField {
 
 		private final GroundCheck check;
@@ -169,6 +165,14 @@ public class GroundCheck {
 		private final Location location_2;
 		private final Location location_3;
 		private final Location location_4;
+
+		public LargeField(GroundCheck check, Location location_1, Location location_2, Location location_3, Location location_4) {
+			this.check = check;
+			this.location_1 = location_1;
+			this.location_2 = location_2;
+			this.location_3 = location_3;
+			this.location_4 = location_4;
+		}
 
 		public List<Location> getLocations() {
 			return Arrays.asList(location_1, location_2, location_3, location_4);
@@ -179,6 +183,26 @@ public class GroundCheck {
 					check.check(location_2) &&
 					check.check(location_3) &&
 					check.check(location_4);
+		}
+
+		public GroundCheck getCheck() {
+			return check;
+		}
+
+		public Location getLocation_1() {
+			return location_1;
+		}
+
+		public Location getLocation_2() {
+			return location_2;
+		}
+
+		public Location getLocation_3() {
+			return location_3;
+		}
+
+		public Location getLocation_4() {
+			return location_4;
 		}
 	}
 }
