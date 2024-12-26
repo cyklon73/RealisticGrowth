@@ -2,6 +2,8 @@ package de.cyklon.realisticgrowth;
 
 import de.cyklon.realisticgrowth.spigotmc.UpdateCheck;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.DrilldownPie;
+import org.bstats.charts.SimpleBarChart;
 import org.bstats.charts.SimplePie;
 import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 public final class RealisticGrowth extends JavaPlugin implements Listener {
@@ -51,15 +54,15 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         this.config = getConfig();
 
-        metrics.addCustomChart(new SimplePie("check-updates", () -> String.valueOf(config.getBoolean("check-updates"))));
-        metrics.addCustomChart(new SingleLineChart("replant-chance", () -> config.getInt("replant-chance")));
-
         if (config.getBoolean("check-updates", true)) UpdateCheck.checkUpdate(this);
 
         this.replant_chance = config.getInt("replant-chance", 90)/100d;
 
         if (replant_chance > 1) replant_chance = 1;
         if (replant_chance < 0) replant_chance = 0;
+
+        metrics.addCustomChart(new SimplePie("check-updates", () -> String.valueOf(config.getBoolean("check-updates"))));
+        metrics.addCustomChart(new SimplePie("replant-chance", () -> String.valueOf(((int)replant_chance*100))));
 
         if (replant_chance != 1 && replant_chance != 0) random = new Random();
 
@@ -164,10 +167,10 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         SaplingData data;
         if ((data = saplings.get(mat))!=null) {
             mat = replaces.getOrDefault(mat, mat);
-            GroundCheck check;
+            GroundCheck check = null;
             if (random()) {
                 boolean largeCheck;
-                if ((largeCheck = ((check = data.largeCheck()).check(location) && data.largeTree())) && amount >= 4) {
+                if ((largeCheck = (data.largeTree() && (check = data.largeCheck()).check(location))) && amount >= 4) {
                     GroundCheck.LargeField field = check.getField();
                     Location loc1 = field.getLocation_1();
                     Location loc2 = field.getLocation_2();
