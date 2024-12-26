@@ -1,6 +1,9 @@
 package de.cyklon.realisticgrowth;
 
 import de.cyklon.realisticgrowth.spigotmc.UpdateCheck;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,6 +21,8 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 public final class RealisticGrowth extends JavaPlugin implements Listener {
+
+    private static final int ID = 24240;
 
     public static final String PREFIX = "%s[%sRealistic %sGrowth%s]%s".formatted(ChatColor.GOLD, ChatColor.GREEN, ChatColor.AQUA, ChatColor.GOLD, ChatColor.RESET);
 
@@ -37,11 +42,16 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
     public void onEnable() {
         this.saveDefaultConfig();
 
+        Metrics metrics = new Metrics(this, ID);
+
         this.saplings = new HashMap<>();
         this.replaces = new HashMap<>();
         this.placeHandler = new HashMap<>();
 
         this.config = getConfig();
+
+        metrics.addCustomChart(new SimplePie("check-updates", () -> String.valueOf(config.getBoolean("check-updates"))));
+        metrics.addCustomChart(new SingleLineChart("replant-chance", () -> config.getInt("replant-chance")));
 
         if (config.getBoolean("check-updates", true)) UpdateCheck.checkUpdate(this);
 
