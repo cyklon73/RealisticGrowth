@@ -17,6 +17,7 @@ Configurable Planting Chance: The plugin offers full configurability, allowing y
   -  Jungle Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
   -  Dark Oak Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
   -  Mangrove Propagule
+  -  Pale Oak Sapling
 
 - Crops & Seeds:
 
