@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -65,6 +66,8 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         put(GroundCheck.checkTreeGround(), Material.OAK_SAPLING, Material.BIRCH_SAPLING, Material.ACACIA_SAPLING);
 
         put(GroundCheck.checkTreeGround(), GroundCheck.checkLargeTreeGround(), Material.SPRUCE_SAPLING, Material.JUNGLE_SAPLING, Material.DARK_OAK_SAPLING);
+
+        putLarge(GroundCheck.checkLargeTreeGround(), Material.PALE_OAK_SAPLING);
 
         put(GroundCheck.checkMangroveGround(), Material.MANGROVE_PROPAGULE);
 
@@ -120,12 +123,16 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         put(check, null, types);
     }
 
+    private void putLarge(GroundCheck largeCheck, Material... types) {
+        put(null, largeCheck, types);
+    }
+
     private void put(GroundCheck check, GroundCheck largeCheck, Material... types) {
         for (Material type : types) {
             String key = type.getKey().getKey();
             if (config.getBoolean("replant." + key, true)) {
                 getLogger().config("Replanting " + key + " enabled");
-                saplings.put(type, new SaplingData(type, largeCheck!=null, largeCheck, check));
+                saplings.put(type, new SaplingData(type, check!=null, largeCheck!=null, largeCheck, check));
             } else getLogger().config("Replanting " + key + " disabled");
         }
     }
@@ -153,27 +160,40 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         ItemStack stack = event.getEntity().getItemStack();
         Material mat = stack.getType();
         Location location = event.getLocation();
+        int amount = stack.getAmount();
         SaplingData data;
         if ((data = saplings.get(mat))!=null) {
             mat = replaces.getOrDefault(mat, mat);
             GroundCheck check;
-            if (stack.getAmount() >= 4 && data.largeTree() && (check = data.largeCheck()).check(location) && random()) {
-                GroundCheck.LargeField field = check.getField();
-                Location loc1 = field.getLocation_1();
-                Location loc2 = field.getLocation_2();
-                Location loc3 = field.getLocation_3();
-                Location loc4 = field.getLocation_4();
+            if (random()) {
+                boolean largeCheck;
+                if ((largeCheck = ((check = data.largeCheck()).check(location) && data.largeTree())) && amount >= 4) {
+                    GroundCheck.LargeField field = check.getField();
+                    Location loc1 = field.getLocation_1();
+                    Location loc2 = field.getLocation_2();
+                    Location loc3 = field.getLocation_3();
+                    Location loc4 = field.getLocation_4();
 
-                getLogger().finest(String.format("replant large tree %s at %s { 1 = { x=%s, y=%s, z=%s }, 2 = { x=%s, y=%s, z=%s }, 3 = { x=%s, y=%s, z=%s }, 4 = { x=%s, y=%s, z=%s } }",
-                        mat.getKey().getKey(), location.getWorld(), loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ(),
-                        loc3.getX(), loc3.getY(), loc3.getZ(), loc4.getX(), loc4.getY(), loc4.getZ()));
+                    getLogger().finest(String.format("replant large tree %s at %s { 1 = { x=%s, y=%s, z=%s }, 2 = { x=%s, y=%s, z=%s }, 3 = { x=%s, y=%s, z=%s }, 4 = { x=%s, y=%s, z=%s } }",
+                            mat.getKey().getKey(), location.getWorld(), loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ(),
+                            loc3.getX(), loc3.getY(), loc3.getZ(), loc4.getX(), loc4.getY(), loc4.getZ()));
 
-                for (Location l : field.getLocations()) {
-                    place(l, mat);
+                    for (Location l : field.getLocations()) {
+                        place(l, mat);
+                    }
+                } else if (largeCheck && (amount >= 2 || !data.normalAllowed())) {
+                    GroundCheck.LargeField field = check.getField();
+                    List<Location> locations = field.getLocations().subList(0, amount);
+
+                    for (Location l : locations) {
+                        place(l, mat);
+                    }
+                } else if(data.normalAllowed()) {
+                    if (data.normalCheck().check(location)) {
+                        getLogger().finest(String.format("replant %s at %s {x=%s, y=%s, z=%s}", mat.getKey().getKey(), location.getWorld(), location.getX(), location.getX(), location.getZ()));
+                        place(location, mat);
+                    }
                 }
-            } else if (data.normalCheck().check(location) && random()) {
-                getLogger().finest(String.format("replant %s at %s {x=%s, y=%s, z=%s}", mat.getKey().getKey(), location.getWorld(), location.getX(), location.getX(), location.getZ()));
-                place(location, mat);
             }
         }
     }
