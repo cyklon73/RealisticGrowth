@@ -35,7 +35,7 @@ public class UpdateCheck {
 	public static void checkUpdate(Plugin plugin) {
 		getVersion(plugin, version -> {
 			String currentVersion = plugin.getDescription().getVersion();
-			if (!version.equals(currentVersion)) {
+			if (toVersionInt(version) > toVersionInt(currentVersion)) {
 				BaseComponent[] components = new ComponentBuilder(RealisticGrowth.PREFIX + " Update available!\n")
 						.append(RealisticGrowth.PREFIX + " Current Version: ").color(ChatColor.GOLD)
 								.append(currentVersion).color(ChatColor.RED)
@@ -57,5 +57,9 @@ public class UpdateCheck {
 				});
 			}
 		});
+	}
+
+	private static int toVersionInt(String version) {
+		return Integer.parseInt(version.replace(".", ""));
 	}
 }
