@@ -60,6 +60,6 @@ public class UpdateCheck {
 	}
 
 	private static int toVersionInt(String version) {
-		return Integer.parseInt(version.replace(".", ""));
+		return Integer.parseInt(version.replace(".", "").split("-")[0]);
 	}
 }
