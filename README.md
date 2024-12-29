@@ -7,7 +7,7 @@ Configurable Planting Chance: The plugin offers full configurability, allowing y
 (default is 90%)
 
 
-# Supported Plants and Their Planting Grounds:
+# Supported Plants:
 - Tree Saplings:
 
   -  Oak Sapling
