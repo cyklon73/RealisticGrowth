@@ -61,3 +61,5 @@ Configurable Planting Chance: The plugin offers full configurability, allowing y
   -  Beetroot seeds
   -  Potato
   -  Carrot
+
+![bStats](https://bstats.org/signatures/bukkit/Realistic%20Growth.svg)
