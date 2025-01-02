@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import static net.md_5.bungee.api.ChatColor.*;
 import static de.cyklon.realisticgrowth.RealisticGrowth.PREFIX;
 
+@Deprecated
 public class UpdateCheck {
 
 	public static final int RESOURCE_ID = 121462;
