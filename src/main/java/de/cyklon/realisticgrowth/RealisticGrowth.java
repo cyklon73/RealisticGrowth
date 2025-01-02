@@ -2,10 +2,7 @@ package de.cyklon.realisticgrowth;
 
 import de.cyklon.realisticgrowth.spigotmc.UpdateCheck;
 import org.bstats.bukkit.Metrics;
-import org.bstats.charts.DrilldownPie;
-import org.bstats.charts.SimpleBarChart;
 import org.bstats.charts.SimplePie;
-import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 public final class RealisticGrowth extends JavaPlugin implements Listener {
@@ -35,6 +31,8 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
     private Map<Material, SaplingData> saplings;
     private Map<Material, Material> replaces;
     private Map<Material, Consumer<Location>> placeHandler;
+
+    private boolean compatibilityMode;
 
     private FileConfiguration config;
 
@@ -53,6 +51,16 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         this.placeHandler = new HashMap<>();
 
         this.config = getConfig();
+
+        if (isSpigot()) getLogger().info("Server Running on Spigot (or Spigot fork)");
+        else getLogger().info("Server Running on Bukkit");
+
+        this.compatibilityMode = !isSpigot();
+
+        if (config.getBoolean("force-compatibility-mode", false)) this.compatibilityMode = true;
+
+        if (compatibilityMode) getLogger().info("Start in Compatibility mode");
+        else getLogger().info("Running on Spigot, Start in normal mode");
 
         if (config.getBoolean("check-updates", true)) UpdateCheck.checkUpdate(this);
 
@@ -199,5 +207,22 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
                 }
             }
         }
+    }
+
+    public static boolean isClassPresent(String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+	        return false;
+        }
+    }
+
+    public static boolean isSpigot() {
+        return isClassPresent("org.spigotmc.SpigotConfig");
+    }
+
+    public boolean isCompatibilityMode() {
+        return compatibilityMode;
     }
 }

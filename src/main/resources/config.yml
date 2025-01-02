@@ -57,3 +57,6 @@ replant:
   pumpkin_seeds: true
   melon_seeds: true
   sweet_berries: true
+
+#Do not change this setting, this setting is for development only
+force-compatibility-mode: false
