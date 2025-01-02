@@ -13,9 +13,11 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,6 +42,8 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
     private Map<Material, SaplingData> saplings;
     private Map<Material, Material> replaces;
     private Map<Material, Consumer<Location>> placeHandler;
+
+    private Updater updater;
 
     private boolean compatibilityMode;
 
@@ -71,7 +75,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         if (compatibilityMode) getLogger().info("Start in Compatibility mode");
         else getLogger().info("Running on Spigot, Start in normal mode");
 
-        Updater updater = new Updater(this, getFile());
+        this.updater = new Updater(this, getFile());
         if (config.getBoolean("check-updates", true)) updater.check();
 
         this.replant_chance = config.getInt("replant-chance", 90)/100d;
@@ -224,6 +228,12 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        Player p = event.getPlayer();
+        if (p.hasPermission(Permission.UPDATE)) updater.check(p);
     }
 
     public static boolean isClassPresent(String className) {
