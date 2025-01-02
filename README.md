@@ -7,7 +7,7 @@ Configurable Planting Chance: The plugin offers full configurability, allowing y
 (default is 90%)
 
 
-# Supported Plants and Their Planting Grounds:
+# Supported Plants:
 - Tree Saplings:
 
   -  Oak Sapling
@@ -61,3 +61,5 @@ Configurable Planting Chance: The plugin offers full configurability, allowing y
   -  Beetroot seeds
   -  Potato
   -  Carrot
+
+![bStats](https://bstats.org/signatures/bukkit/Realistic%20Growth.svg)
