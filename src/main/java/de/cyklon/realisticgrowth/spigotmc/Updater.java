@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import de.cyklon.realisticgrowth.Permission;
 import de.cyklon.realisticgrowth.RealisticGrowth;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -12,6 +13,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -41,6 +43,7 @@ public class Updater {
 	private boolean checked = false;
 	private boolean manualCheck = false;
 	private boolean shouldUpdate = false;
+	private CommandSender sender = null;
 
 	private static final String DOWNLOAD = "/download";
 	private static final String VERSIONS = "/versions";
@@ -67,9 +70,15 @@ public class Updater {
 
 	public void check(boolean manualCheck) {
 		this.manualCheck = manualCheck;
+		this.sender = null;
 		checked = true;
 		thread = new Thread(new UpdaterRunnable());
 		thread.start();
+	}
+
+	public void check(CommandSender sender) {
+		check(false);
+		this.sender = sender;
 	}
 
 	public boolean shouldUpdate() {
@@ -234,7 +243,7 @@ public class Updater {
 					String currentVersion = plugin.getDescription().getVersion();
 					log.info("Update available");
 					if (plugin.isCompatibilityMode()) {
-						Bukkit.broadcast("""
+						String msg = """
                             %s Update available!
                             %s %sCurrent Version: %s %s %s
                             %s %sNew Version: %s %s %s
@@ -248,7 +257,10 @@ public class Updater {
 								PREFIX, AQUA, RESET,
 								PREFIX, ChatColor.YELLOW, ChatColor.RESET,
 								PREFIX, downloadUrl
-						), "rg.update");
+						);
+
+						if (sender==null) Bukkit.broadcast(msg, Permission.UPDATE.getName());
+						else sender.sendMessage(msg);
 					} else {
 						BaseComponent[] components = new ComponentBuilder(PREFIX + " Update available!\n")
 								.append(PREFIX + " Current Version: ").color(GOLD)
@@ -268,10 +280,12 @@ public class Updater {
 										.create())))
 								.create();
 
-						Bukkit.getConsoleSender().spigot().sendMessage(components);
-						Bukkit.getOnlinePlayers().forEach(p -> {
-							if (p.hasPermission("rg.update")) p.spigot().sendMessage(components);
-						});
+						if (sender==null) {
+							Bukkit.getConsoleSender().spigot().sendMessage(components);
+							Bukkit.getOnlinePlayers().forEach(p -> {
+								if (p.hasPermission(Permission.UPDATE)) p.spigot().sendMessage(components);
+							});
+						} else sender.spigot().sendMessage(components);
 					}
 				}
 			}
