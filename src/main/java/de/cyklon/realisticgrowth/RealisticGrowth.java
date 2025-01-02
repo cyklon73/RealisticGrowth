@@ -1,6 +1,6 @@
 package de.cyklon.realisticgrowth;
 
-import de.cyklon.realisticgrowth.spigotmc.UpdateCheck;
+import de.cyklon.realisticgrowth.command.MainCommand;
 import de.cyklon.realisticgrowth.spigotmc.Updater;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -8,6 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -123,6 +125,13 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
 
         getServer().getPluginManager().registerEvents(this, this);
+        registerCommand("realistic-growth", new MainCommand(this, updater));
+    }
+
+    private PluginCommand registerCommand(String name, CommandExecutor executor) {
+        PluginCommand pc = Bukkit.getPluginCommand(name);
+        pc.setExecutor(executor);
+        return pc;
     }
 
     private void registerLarge(Material type) {

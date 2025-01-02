@@ -5,6 +5,13 @@ main: de.cyklon.realisticgrowth.RealisticGrowth
 api-version: 1.21
 
 permissions:
-  rg.update-msg:
-    description: Receives update messages
+  rg.update:
+    description: Receives update messages and can run updates
     default: op
+
+commands:
+  realistic-growth:
+    description: manage the plugin
+    permission: rg.update
+    aliases: rg
+    usage: /realistic-growth update
