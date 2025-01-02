@@ -1,6 +1,7 @@
 package de.cyklon.realisticgrowth;
 
 import de.cyklon.realisticgrowth.spigotmc.UpdateCheck;
+import de.cyklon.realisticgrowth.spigotmc.Updater;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -62,7 +63,8 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         if (compatibilityMode) getLogger().info("Start in Compatibility mode");
         else getLogger().info("Running on Spigot, Start in normal mode");
 
-        if (config.getBoolean("check-updates", true)) UpdateCheck.checkUpdate(this);
+        Updater updater = new Updater(this, getFile());
+        if (config.getBoolean("check-updates", true)) updater.check();
 
         this.replant_chance = config.getInt("replant-chance", 90)/100d;
 
