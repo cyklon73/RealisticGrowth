@@ -10,13 +10,19 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -235,5 +241,27 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     public boolean isCompatibilityMode() {
         return compatibilityMode;
+    }
+
+    @Override
+    public void saveDefaultConfig() {
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (configFile.exists()) {
+            YamlConfiguration defaultConfig = new YamlConfiguration();
+            try (InputStream in = getResource("config.yml")) {
+                if (in==null) {
+                    getLogger().severe("Default config not found");
+                    return;
+                }
+                defaultConfig.load(new InputStreamReader(in));
+            } catch (IOException | InvalidConfigurationException e) {
+	            getLogger().severe("Could not load default config");
+            }
+            FileConfiguration config = getConfig();
+            for (String key : defaultConfig.getKeys(true)) {
+                if (!config.contains(key)) config.set(key, defaultConfig.get(key));
+            }
+            saveConfig();
+        } else super.saveDefaultConfig();
     }
 }
