@@ -35,7 +35,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     private static final int ID = 24240;
 
-    public static final String PREFIX = "%s[%sRealistic %sGrowth%s]%s".formatted(ChatColor.GOLD, ChatColor.GREEN, ChatColor.AQUA, ChatColor.GOLD, ChatColor.RESET);
+    public static final ColorUtil.GradientData PREFIX = ColorUtil.gradientData(ChatColor.GOLD, '[', "Realistic Growth", ChatColor.GOLD, ']', ChatColor.GREEN, ChatColor.AQUA);
 
     private static final String UPPER = "[half=upper]";
 
