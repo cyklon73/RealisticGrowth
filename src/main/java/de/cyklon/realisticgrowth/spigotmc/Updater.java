@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import de.cyklon.realisticgrowth.util.MinecraftVersion;
 import de.cyklon.realisticgrowth.util.Permission;
 import de.cyklon.realisticgrowth.RealisticGrowth;
 import de.cyklon.realisticgrowth.util.ColorUtil;
@@ -34,7 +35,7 @@ public class Updater {
 	private final File updateFolder;
 	private int page = 1;
 	private boolean emptyPage;
-	private String version;
+	private MinecraftVersion version;
 	private final Logger log;
 
 	private boolean checked = false;
@@ -141,9 +142,9 @@ public class Updater {
 
 				JsonObject object = element.getAsJsonObject();
 				element = object.get("name");
-				version = element.toString().replaceAll("\"", "").replace("v","");
+				version = MinecraftVersion.parseVersion(element.toString().replaceAll("\"", "").replace("v","").split("-")[0]);
 				log.info("Checking for update...");
-				if(shouldUpdate(version, plugin.getDescription().getVersion()))
+				if(shouldUpdate(version, MinecraftVersion.parseVersion(plugin.getDescription().getVersion().split("\n")[0])))
 				{
 					shouldUpdate = true;
 					log.info("Update found!");
@@ -163,9 +164,9 @@ public class Updater {
 		return false;
 	}
 
-	private boolean shouldUpdate(String newVersion, String oldVersion)
+	private boolean shouldUpdate(MinecraftVersion newVersion, MinecraftVersion oldVersion)
 	{
-		return !newVersion.equalsIgnoreCase(oldVersion);
+		return newVersion.getVersion() > oldVersion.getVersion();
 	}
 
 	public boolean download() {
@@ -261,7 +262,7 @@ public class Updater {
 								.append("\n")
 								.append(PREFIX.getComponents())
 								.append(" New Version: ").color(GOLD)
-								.append(version).color(GREEN)
+								.append(version.formatted()).color(GREEN)
 
 								.append("\n")
 								.append(PREFIX.getComponents())
