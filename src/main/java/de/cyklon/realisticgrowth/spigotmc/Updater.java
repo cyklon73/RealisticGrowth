@@ -38,7 +38,6 @@ public class Updater {
 	private boolean emptyPage;
 	private String version;
 	private final Logger log;
-	private Thread thread;
 
 	private boolean checked = false;
 	private boolean manualCheck = false;
@@ -72,8 +71,7 @@ public class Updater {
 		this.manualCheck = manualCheck;
 		this.sender = null;
 		checked = true;
-		thread = new Thread(new UpdaterRunnable());
-		thread.start();
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, new UpdaterRunnable());
 	}
 
 	public void check(CommandSender sender) {
@@ -210,19 +208,6 @@ public class Updater {
 				}
 			} catch (final IOException e) {
 				e.printStackTrace();
-				this.plugin.getLogger().log(Level.SEVERE, null, e);
-			}
-		}
-	}
-
-	private void waitThread()
-	{
-		if(thread != null && thread.isAlive())
-		{
-			try
-			{
-				thread.join();
-			} catch (InterruptedException e) {
 				this.plugin.getLogger().log(Level.SEVERE, null, e);
 			}
 		}
