@@ -1,4 +1,4 @@
-package de.cyklon.realisticgrowth;
+package de.cyklon.realisticgrowth.util;
 
 public final class Permission extends org.bukkit.permissions.Permission {
 
