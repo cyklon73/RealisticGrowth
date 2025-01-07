@@ -1,5 +1,6 @@
 package de.cyklon.realisticgrowth;
 
+import de.cyklon.realisticgrowth.util.MinecraftVersion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,18 +12,22 @@ import java.util.function.BiPredicate;
 
 public class GroundCheck {
 
+	private final MinecraftVersion version;
 	private BiPredicate<GroundCheck, Location> check;
 	private LargeField field;
 
-	private GroundCheck(BiPredicate<GroundCheck, Location> check) {
+	private GroundCheck(MinecraftVersion version, BiPredicate<GroundCheck, Location> check) {
+		this.version = version;
 		this.check = check;
 	}
 
-	public static GroundCheck checkTreeGround() {
-		return checkBelow(Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MOSS_BLOCK, Material.MYCELIUM, Material.ROOTED_DIRT);
+	public static GroundCheck checkTreeGround(MinecraftVersion version) {
+		GroundCheck check = checkBelow(version, Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM);
+		if (version.checkVersion(1, 17, 0)) check = check.or(checkBelow(version, Material.MOSS_BLOCK, Material.ROOTED_DIRT));
+		return check;
 	}
 
-	public static GroundCheck checkLargeTreeGround() {
+	public static GroundCheck checkLargeTreeGround(MinecraftVersion version) {
 		/*
 		x ->    z |
 
@@ -38,9 +43,9 @@ public class GroundCheck {
 		4		1 X
 				3 4
 		 */
-		return new GroundCheck((gc, l) -> {
+		return new GroundCheck(version, (gc, l) -> {
 			LargeField f_1 = new LargeField(
-					checkTreeGround(),
+					checkTreeGround(version),
 					l.clone().add(-1, 1, -1),
 					l.clone().add(0, 1, -1),
 					l.clone().add(-1, 1, 0),
@@ -48,7 +53,7 @@ public class GroundCheck {
 			);
 
 			LargeField f_2 = new LargeField(
-					checkTreeGround(),
+					checkTreeGround(version),
 					l.clone().add(0, 1, -1),
 					l.clone().add(1, 1, -1),
 					l.clone().add(0, 1, 0),
@@ -56,7 +61,7 @@ public class GroundCheck {
 			);
 
 			LargeField f_3 = new LargeField(
-					checkTreeGround(),
+					checkTreeGround(version),
 					l.clone().add(0, 1, 0),
 					l.clone().add(1, 1, 0),
 					l.clone().add(0, 1, 1),
@@ -64,7 +69,7 @@ public class GroundCheck {
 			);
 
 			LargeField f_4 = new LargeField(
-					checkTreeGround(),
+					checkTreeGround(version),
 					l.clone().add(-1, 1, 0),
 					l.clone().add(0, 1, 0),
 					l.clone().add(-1, 1, 1),
@@ -81,43 +86,51 @@ public class GroundCheck {
 		});
 	}
 
-	public static GroundCheck checkMangroveGround() {
-		return checkBelow(Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM, Material.ROOTED_DIRT);
+	public static GroundCheck checkMangroveGround(MinecraftVersion version) {
+		GroundCheck check = checkBelow(version, Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM);
+		if (version.checkVersion(1, 17, 0)) check = check.or(checkBelow(version, Material.ROOTED_DIRT));
+		return check;
 	}
 
-	public static GroundCheck checkBambooGround() {
-		return checkBelow(Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.SAND, Material.RED_SAND, Material.MUD, Material.MYCELIUM, Material.ROOTED_DIRT);
+	public static GroundCheck checkBambooGround(MinecraftVersion version) {
+		GroundCheck check = checkBelow(version, Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.SAND, Material.RED_SAND, Material.MYCELIUM);
+		if (version.checkVersion(1, 17, 0)) check = check.or(checkBelow(version, Material.ROOTED_DIRT));
+		if (version.checkVersion(1, 19, 0)) check = check.or(checkBelow(version, Material.MUD));
+		return check;
 	}
 
-	public static GroundCheck checkSugarGround() {
-		return checkBelow(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL, Material.SAND, Material.RED_SAND, Material.MUD)
-				.and(checkAround(Material.WATER));
+	public static GroundCheck checkSugarGround(MinecraftVersion version) {
+		GroundCheck check = checkBelow(version, Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL, Material.SAND, Material.RED_SAND);
+		if (version.checkVersion(1, 19, 0)) check.or(checkBelow(version, Material.MUD));
+		return check.and(checkAround(Material.WATER));
 	}
 
-	public static GroundCheck checkCactusGround() {
-		return checkBelow(Material.SAND, Material.RED_SAND)
+	public static GroundCheck checkCactusGround(MinecraftVersion version) {
+		return checkBelow(version, Material.SAND, Material.RED_SAND)
 				.and((gc, l) -> checkAround(Material.AIR).test(gc, l.clone().add(0, 1, 0)));
 	}
 
-	public static GroundCheck checkFlowerGround() {
-		return checkBelow(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL, Material.MOSS_BLOCK, Material.MYCELIUM);
+	public static GroundCheck checkFlowerGround(MinecraftVersion version) {
+		GroundCheck check = checkBelow(version, Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM);
+		if (version.checkVersion(1, 17, 0)) check = check.or(checkBelow(version, Material.MOSS_BLOCK));
+		return check;
 	}
 
-	public static GroundCheck checkLargeFlowerGround() {
-		return checkFlowerGround().and((gc, l) -> l.clone().add(0, 2, 0).getBlock().getType().equals(Material.AIR));
+	public static GroundCheck checkLargeFlowerGround(MinecraftVersion version) {
+		return checkFlowerGround(version).and((gc, l) -> l.clone().add(0, 2, 0).getBlock().getType().equals(Material.AIR));
 	}
 
-	public static GroundCheck checkMushroomGround() {
-		return checkBelow(Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM)
+	public static GroundCheck checkMushroomGround(MinecraftVersion version) {
+		return checkBelow(version, Material.DIRT, Material.GRASS_BLOCK, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM)
 				.and((gc, l) -> l.getBlock().getLightLevel() <= 12);
 	}
 
-	public static GroundCheck checkNetherGround() {
-		return checkBelow(Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM, Material.SOUL_SOIL);
+	public static GroundCheck checkNetherGround(MinecraftVersion version) {
+		return checkBelow(version, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM, Material.SOUL_SOIL);
 	}
 
-	public static GroundCheck checkCoralGround() {
-		return checkBelow(Material.SAND, Material.RED_SAND, Material.GRAVEL)
+	public static GroundCheck checkCoralGround(MinecraftVersion version) {
+		return checkBelow(version, Material.SAND, Material.RED_SAND, Material.GRAVEL)
 				.and((gc, l) -> checkAround(Material.WATER).test(gc, l.clone().add(0, 1, 0)));
 	}
 
@@ -133,13 +146,15 @@ public class GroundCheck {
 		};
 	}
 
-	public static GroundCheck checkBelow(Material... material) {
-		return new GroundCheck((gc, l) -> Arrays.asList(material).contains(l.getBlock().getType()));
+	public static GroundCheck checkBelow(MinecraftVersion version, Material... material) {
+		return new GroundCheck(version, (gc, l) -> Arrays.asList(material).contains(l.getBlock().getType()));
 	}
 
 	private boolean checkTargetBlock(Block block) {
 		if (block.getBlockData() instanceof Snow snow && snow.getLayers() <= 1) return true;
-		return Arrays.asList(Material.AIR, Material.SHORT_GRASS, Material.TALL_GRASS, Material.FERN, Material.LARGE_FERN).contains(block.getType());
+		Material shortGrass = null;
+		if (version.checkVersion(1, 20, 3)) shortGrass = Material.SHORT_GRASS;
+		return Arrays.asList(Material.AIR, shortGrass, Material.TALL_GRASS, Material.FERN, Material.LARGE_FERN).contains(block.getType());
 	}
 
 	public boolean check(Location location) {
@@ -149,6 +164,11 @@ public class GroundCheck {
 
 	private GroundCheck and(BiPredicate<GroundCheck, Location> check) {
 		this.check = this.check.and(check);
+		return this;
+	}
+
+	private GroundCheck or(GroundCheck check) {
+		this.check = this.check.or(check.check);
 		return this;
 	}
 
