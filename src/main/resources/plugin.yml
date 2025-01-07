@@ -14,4 +14,4 @@ commands:
     description: manage the plugin
     permission: rg.update
     aliases: rg
-    usage: /realistic-growth update
+    usage: "§cUsage: /realistic-growth update"
