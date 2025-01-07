@@ -4,12 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import de.cyklon.realisticgrowth.Permission;
+import de.cyklon.realisticgrowth.util.Permission;
 import de.cyklon.realisticgrowth.RealisticGrowth;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
+import de.cyklon.realisticgrowth.util.ColorUtil;
+import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,6 +16,7 @@ import org.bukkit.command.CommandSender;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +32,6 @@ public class Updater {
 	private String downloadUrl;
 	private final RealisticGrowth plugin;
 	private final File updateFolder;
-	private final File jarFile;
 	private int page = 1;
 	private boolean emptyPage;
 	private String version;
@@ -48,12 +46,12 @@ public class Updater {
 	private static final String VERSIONS = "/versions";
 	private static final String PAGE = "?page=";
 	private static final String API_RESOURCE = "https://api.spiget.org/v2/resources/";
+	private static final String RESOURCE_URL = "https://www.spigotmc.org/resources/realistic-growth.121462/";
 
-	public Updater(RealisticGrowth plugin, File file)
+	public Updater(RealisticGrowth plugin)
 	{
 		this.plugin = plugin;
 		this.updateFolder = plugin.getServer().getUpdateFolderFile();
-		this.jarFile = file;
 		this.log = plugin.getLogger();
 
 		downloadUrl = API_RESOURCE + RESOURCE_ID;
@@ -170,8 +168,9 @@ public class Updater {
 		return !newVersion.equalsIgnoreCase(oldVersion);
 	}
 
-	public boolean download()
-	{
+	public boolean download() {
+		if (!updateFolder.exists()) updateFolder.mkdirs();
+
 		BufferedInputStream in = null;
 		FileOutputStream fout = null;
 
@@ -179,7 +178,7 @@ public class Updater {
 		{
 			URL url = new URL(downloadUrl);
 			in = new BufferedInputStream(url.openStream());
-			fout = new FileOutputStream(new File(updateFolder, jarFile.getName()));
+			fout = new FileOutputStream(new File(updateFolder, plugin.getDescription().getName() + "-" + version + ".jar"));
 
 			final byte[] data = new byte[4096];
 			int count;
@@ -190,7 +189,7 @@ public class Updater {
 		}
 		catch (Exception e)
 		{
-			log.severe("Updater cant download the update.");
+			log.log(Level.SEVERE, "Updater cant download the update.", e);
 			return false;
 		}
 		finally {
@@ -227,53 +226,107 @@ public class Updater {
 				if (checkUpdate() && !manualCheck) {
 					String currentVersion = plugin.getDescription().getVersion();
 					log.info("Update available");
-					if (plugin.isCompatibilityMode()) {
-						String msg = """
-                            %s Update available!
-                            %s %sCurrent Version: %s %s %s
-                            %s %sNew Version: %s %s %s
-                            %s Update using %s/realistic-growth update%s
-                            %s Or Update Manually by downloading the new Version on %s[SpigotMC] %s
-                            %s %s
-                            """.formatted(
-								PREFIX,
-								PREFIX, ChatColor.GOLD, ChatColor.RED, currentVersion, ChatColor.RESET,
-								PREFIX, ChatColor.GOLD, ChatColor.GREEN, version, ChatColor.RESET,
-								PREFIX, AQUA, RESET,
-								PREFIX, ChatColor.YELLOW, ChatColor.RESET,
-								PREFIX, downloadUrl
-						);
 
-						if (sender==null) Bukkit.broadcast(msg, Permission.UPDATE.getName());
-						else sender.sendMessage(msg);
+					String msg = "";
+					if (plugin.isCompatibilityMode() || sender==null) {
+						msg = """
+                            Update available!
+                            %sCurrent Version: %s %s %s
+                            %sNew Version: %s %s %s
+                            %sUpdate using %s/realistic-growth update%s
+                            %sOr Update Manually by downloading the new Version on %s[SpigotMC] %s
+                            %s
+                            """.formatted(
+								ChatColor.GOLD, ChatColor.RED, currentVersion, ChatColor.RESET,
+								ChatColor.GOLD, ChatColor.GREEN, version, ChatColor.RESET,
+								ChatColor.GREEN, ChatColor.AQUA, ChatColor.RESET,
+								ChatColor.GREEN, ChatColor.YELLOW, ChatColor.RESET,
+								RESOURCE_URL
+						);
+					}
+
+					if (plugin.isCompatibilityMode()) {
+						if (sender==null) sendMessage(msg);
+						else sendMessage(sender, msg);
 					} else {
-						BaseComponent[] components = new ComponentBuilder(PREFIX + " Update available!\n")
-								.append(PREFIX + " Current Version: ").color(GOLD)
+
+						BaseComponent[] components = new ComponentBuilder()
+								.append(PREFIX.getComponents())
+								.append(" Update available!\n")
+
+								.append(PREFIX.getComponents())
+								.append(" Current Version: ").color(GOLD)
 								.append(currentVersion).color(RED)
-								.append("\n" + PREFIX + " New Version: ").color(GOLD)
+
+								.append("\n")
+								.append(PREFIX.getComponents())
+								.append(" New Version: ").color(GOLD)
 								.append(version).color(GREEN)
-								.append("\n" + PREFIX + "Update Automatically by Pressing")
-								.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("Auto Update")))
+
+								.append("\n")
+								.append(PREFIX.getComponents())
+								.append(" ")
+								.append("Update Automatically by Pressing")
+								.reset()
+								.color(GREEN)
+								.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ColorUtil.gradient("Auto Update", AQUA, GREEN))))
 								.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/realistic-growth update"))
-								.append("\n" + PREFIX + " Or Update Manually by downloading the new Version on ")
-								.append("[SpigotMC]").color(YELLOW)
-								.event(new ClickEvent(ClickEvent.Action.OPEN_URL, downloadUrl))
+
+								.append("\n")
+								.reset()
+								.append(PREFIX.getComponents())
+								.append(" Or Update Manually by downloading the new Version on ")
+								.reset()
+								.color(GREEN)
+
+								.append("[SpigotMC]")
+								.color(YELLOW)
 								.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new ComponentBuilder("Realistic ").color(GREEN)
 										.append("Growth").color(AQUA)
 										.append(" | ").color(GRAY)
 										.append("SpigotMC").color(GOLD)
 										.create())))
+								.event(new ClickEvent(ClickEvent.Action.OPEN_URL, RESOURCE_URL))
 								.create();
 
 						if (sender==null) {
-							Bukkit.getConsoleSender().spigot().sendMessage(components);
-							Bukkit.getOnlinePlayers().forEach(p -> {
-								if (p.hasPermission(Permission.UPDATE)) p.spigot().sendMessage(components);
-							});
+							sendMessage(Bukkit.getConsoleSender(), msg);
+							forAllowed(s -> s.spigot().sendMessage(components), false);
 						} else sender.spigot().sendMessage(components);
 					}
 				}
 			}
 		}
+	}
+
+	private void sendMessage(String msg) {
+		sendMessage(msg, true);
+	}
+
+	private void sendMessage(String msg, boolean includeConsole) {
+		sendMessage(null, msg, includeConsole);
+	}
+
+	public void sendMessage(CommandSender sender, String msg) {
+		sendMessage(sender, msg, true);
+	}
+
+	private void sendMessage(CommandSender sender, String msg, boolean includeConsole) {
+		sendMessage(sender, msg.split("\n"), includeConsole);
+	}
+
+	private void sendMessage(CommandSender sender, String[] msg, boolean includeConsole) {
+		if (sender == null) forAllowed(s -> sendMessage(s, msg, includeConsole), includeConsole);
+		else {
+			for (int i = 0; i < msg.length; i++) msg[i] = PREFIX + " " + msg[i];
+			sender.sendMessage(msg);
+		}
+	}
+
+	private void forAllowed(Consumer<CommandSender> consumer, boolean includeConsole) {
+		if (includeConsole) consumer.accept(Bukkit.getConsoleSender());
+		Bukkit.getOnlinePlayers().forEach(p -> {
+			if (p.hasPermission(Permission.UPDATE)) consumer.accept(p);
+		});
 	}
 }
