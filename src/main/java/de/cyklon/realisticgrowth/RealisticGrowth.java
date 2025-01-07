@@ -286,13 +286,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
     }
 
     private MinecraftVersion parseMinecraftVersion() {
-        String version = getServer().getBukkitVersion();
-        version = version.substring(0, version.indexOf('-'));
-        String[] versions = version.split("\\.");
-        int baseVersion = Integer.parseInt(versions[0]);
-        int bigVersion = Integer.parseInt(versions[1]);
-        int smallVersion = versions.length < 3 ? 0 : Integer.parseInt(versions[2]);
-        return new MinecraftVersion(baseVersion, bigVersion, smallVersion);
+        return MinecraftVersion.parseVersion(getServer().getBukkitVersion());
     }
 
     public MinecraftVersion getMinecraftVersion() {

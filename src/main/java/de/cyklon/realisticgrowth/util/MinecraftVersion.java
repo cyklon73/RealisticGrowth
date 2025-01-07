@@ -58,4 +58,13 @@ public class MinecraftVersion {
 	public String toString() {
 		return formatted();
 	}
+
+	public static MinecraftVersion parseVersion(String version) {
+		version = version.substring(0, version.indexOf('-'));
+		String[] versions = version.split("\\.");
+		int baseVersion = Integer.parseInt(versions[0]);
+		int bigVersion = Integer.parseInt(versions[1]);
+		int smallVersion = versions.length < 3 ? 0 : Integer.parseInt(versions[2]);
+		return new MinecraftVersion(baseVersion, bigVersion, smallVersion);
+	}
 }
