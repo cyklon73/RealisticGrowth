@@ -131,7 +131,7 @@ public class Updater {
 				this.page++;
 				return checkUpdate();
 			}
-			else if(jsonArray.isEmpty())
+			else if(jsonArray.size()==0)
 			{
 				emptyPage = true;
 				this.page--;
