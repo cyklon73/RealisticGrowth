@@ -2,6 +2,9 @@ package de.cyklon.realisticgrowth;
 
 import de.cyklon.realisticgrowth.command.MainCommand;
 import de.cyklon.realisticgrowth.spigotmc.Updater;
+import de.cyklon.realisticgrowth.util.ColorUtil;
+import de.cyklon.realisticgrowth.util.MinecraftVersion;
+import de.cyklon.realisticgrowth.util.Permission;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -47,6 +50,8 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     private boolean compatibilityMode;
 
+    private MinecraftVersion minecraftVersion;
+
     private FileConfiguration config;
 
     private double replant_chance;
@@ -55,6 +60,9 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        //TODO compatibility to 1.13
+        this.minecraftVersion = parseMinecraftVersion();
+
         this.saveDefaultConfig();
 
         Metrics metrics = new Metrics(this, ID);
@@ -69,9 +77,9 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         if (config.getBoolean("force-compatibility-mode", false)) this.compatibilityMode = true;
 
         if (compatibilityMode) getLogger().info("Start in Compatibility mode");
-        else getLogger().info("Running on Spigot, Start in normal mode");
+        else getLogger().info("Start in normal mode");
 
-        this.updater = new Updater(this, getFile());
+        this.updater = new Updater(this);
         if (config.getBoolean("check-updates", true)) updater.check();
 
         this.replant_chance = config.getInt("replant-chance", 90)/100d;
@@ -84,39 +92,41 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         if (replant_chance != 1 && replant_chance != 0) random = new Random();
 
-        put(GroundCheck.checkTreeGround(), Material.OAK_SAPLING, Material.BIRCH_SAPLING, Material.ACACIA_SAPLING);
+        put(GroundCheck.checkTreeGround(minecraftVersion), Material.OAK_SAPLING, Material.BIRCH_SAPLING, Material.ACACIA_SAPLING);
 
-        put(GroundCheck.checkTreeGround(), GroundCheck.checkLargeTreeGround(), Material.SPRUCE_SAPLING, Material.JUNGLE_SAPLING, Material.DARK_OAK_SAPLING);
+        put(GroundCheck.checkTreeGround(minecraftVersion), GroundCheck.checkLargeTreeGround(minecraftVersion), Material.SPRUCE_SAPLING, Material.JUNGLE_SAPLING, Material.DARK_OAK_SAPLING);
 
-        putLarge(GroundCheck.checkLargeTreeGround(), Material.PALE_OAK_SAPLING);
+        if (minecraftVersion.checkVersion(1, 21, 2)) putLarge(GroundCheck.checkLargeTreeGround(minecraftVersion), Material.PALE_OAK_SAPLING);
 
-        put(GroundCheck.checkMangroveGround(), Material.MANGROVE_PROPAGULE);
+        if (minecraftVersion.checkVersion(1, 19, 0)) put(GroundCheck.checkMangroveGround(minecraftVersion), Material.MANGROVE_PROPAGULE);
 
-        put(GroundCheck.checkBambooGround(), Material.BAMBOO_SAPLING, Material.BAMBOO);
+        put(GroundCheck.checkBambooGround(minecraftVersion), Material.BAMBOO_SAPLING, Material.BAMBOO);
 
-        put(GroundCheck.checkSugarGround(), Material.SUGAR_CANE);
+        put(GroundCheck.checkSugarGround(minecraftVersion), Material.SUGAR_CANE);
 
-        put(GroundCheck.checkCactusGround(), Material.CACTUS);
+        put(GroundCheck.checkCactusGround(minecraftVersion), Material.CACTUS);
 
-        put(GroundCheck.checkFlowerGround(), Material.DANDELION, Material.POPPY, Material.BLUE_ORCHID, Material.ALLIUM, Material.RED_TULIP, Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY, Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.WITHER_ROSE);
+        put(GroundCheck.checkFlowerGround(minecraftVersion), Material.DANDELION, Material.POPPY, Material.BLUE_ORCHID, Material.ALLIUM, Material.RED_TULIP, Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY, Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.WITHER_ROSE);
 
-        put(GroundCheck.checkLargeFlowerGround(), Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY);
+        put(GroundCheck.checkLargeFlowerGround(minecraftVersion), Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY);
 
-        put(GroundCheck.checkFlowerGround(), Material.FERN, Material.SHORT_GRASS);
+        put(GroundCheck.checkFlowerGround(minecraftVersion), Material.FERN);
 
-        put(GroundCheck.checkLargeFlowerGround(), Material.LARGE_FERN, Material.TALL_GRASS);
+        if (minecraftVersion.checkVersion(1, 20, 3)) put(GroundCheck.checkFlowerGround(minecraftVersion), Material.SHORT_GRASS);
 
-        put(GroundCheck.checkMushroomGround(), Material.RED_MUSHROOM, Material.BROWN_MUSHROOM);
+        put(GroundCheck.checkLargeFlowerGround(minecraftVersion), Material.LARGE_FERN, Material.TALL_GRASS);
 
-        put(GroundCheck.checkNetherGround(), Material.CRIMSON_FUNGUS, Material.WARPED_FUNGUS, Material.CRIMSON_ROOTS, Material.WARPED_ROOTS);
+        put(GroundCheck.checkMushroomGround(minecraftVersion), Material.RED_MUSHROOM, Material.BROWN_MUSHROOM);
 
-        put(GroundCheck.checkCoralGround(), Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_HORN_CORAL_FAN, Material.DEAD_TUBE_CORAL_FAN);
+        put(GroundCheck.checkNetherGround(minecraftVersion), Material.CRIMSON_FUNGUS, Material.WARPED_FUNGUS, Material.CRIMSON_ROOTS, Material.WARPED_ROOTS);
 
-        put(GroundCheck.checkBelow(Material.FARMLAND), Material.WHEAT_SEEDS, Material.BEETROOT_SEEDS, Material.POTATO, Material.CARROT);
+        put(GroundCheck.checkCoralGround(minecraftVersion), Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_HORN_CORAL_FAN, Material.DEAD_TUBE_CORAL_FAN);
 
-        put(GroundCheck.checkBelow(Material.GRASS_BLOCK, Material.FARMLAND), Material.PUMPKIN_SEEDS, Material.MELON_SEEDS);
+        put(GroundCheck.checkBelow(minecraftVersion, Material.FARMLAND), Material.WHEAT_SEEDS, Material.BEETROOT_SEEDS, Material.POTATO, Material.CARROT);
 
-        put(GroundCheck.checkBelow(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL), Material.SWEET_BERRIES);
+        put(GroundCheck.checkBelow(minecraftVersion, Material.GRASS_BLOCK, Material.FARMLAND), Material.PUMPKIN_SEEDS, Material.MELON_SEEDS);
+
+        put(GroundCheck.checkBelow(minecraftVersion, Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL), Material.SWEET_BERRIES);
 
         replaces.put(Material.BAMBOO, Material.BAMBOO_SAPLING);
         replaces.put(Material.SWEET_BERRIES, Material.SWEET_BERRY_BUSH);
@@ -265,9 +275,27 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
             }
             FileConfiguration config = getConfig();
             for (String key : defaultConfig.getKeys(true)) {
-                if (!config.contains(key)) config.set(key, defaultConfig.get(key));
+                if (!config.contains(key, true)) config.set(key, defaultConfig.get(key));
+                if (minecraftVersion.checkVersion(1, 18, 1)) {
+                    config.setComments(key, defaultConfig.getComments(key));
+                    config.setInlineComments(key, defaultConfig.getInlineComments(key));
+                }
             }
             saveConfig();
         } else super.saveDefaultConfig();
+    }
+
+    private MinecraftVersion parseMinecraftVersion() {
+        String version = getServer().getBukkitVersion();
+        version = version.substring(0, version.indexOf('-'));
+        String[] versions = version.split("\\.");
+        int baseVersion = Integer.parseInt(versions[0]);
+        int bigVersion = Integer.parseInt(versions[1]);
+        int smallVersion = versions.length < 3 ? 0 : Integer.parseInt(versions[2]);
+        return new MinecraftVersion(baseVersion, bigVersion, smallVersion);
+    }
+
+    public MinecraftVersion getMinecraftVersion() {
+        return minecraftVersion;
     }
 }
