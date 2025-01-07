@@ -39,9 +39,9 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     private static final String UPPER = "[half=upper]";
 
-    private Map<Material, SaplingData> saplings;
-    private Map<Material, Material> replaces;
-    private Map<Material, Consumer<Location>> placeHandler;
+    private final Map<Material, SaplingData> saplings = new HashMap<>();
+    private final Map<Material, Material> replaces = new HashMap<>();
+    private final Map<Material, Consumer<Location>> placeHandler = new HashMap<>();
 
     private Updater updater;
 
@@ -58,10 +58,6 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         this.saveDefaultConfig();
 
         Metrics metrics = new Metrics(this, ID);
-
-        this.saplings = new HashMap<>();
-        this.replaces = new HashMap<>();
-        this.placeHandler = new HashMap<>();
 
         this.config = getConfig();
 
