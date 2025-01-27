@@ -3,9 +3,8 @@ package de.cyklon.realisticgrowth.command;
 import de.cyklon.realisticgrowth.RealisticGrowth;
 import de.cyklon.realisticgrowth.util.ColorUtil;
 import de.cyklon.realisticgrowth.spigotmc.Updater;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -47,32 +46,35 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 								%sIf the update is not active after reloading, please try to update manually.
 								""".formatted(ChatColor.GREEN, ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GREEN));
 							} else {
-								sender.spigot().sendMessage(new ComponentBuilder()
-										.append(PREFIX.getComponents())
-										.append(" To apply the changes ")
-										.color(GREEN)
+								ComponentBuilder builder = new ComponentBuilder();
 
-										.append("reload")
-										.reset()
-										.color(YELLOW)
-										.bold(true)
-										.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ColorUtil.gradient("Reload now", YELLOW, GREEN))))
-										.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/reload confirm"))
+								if (PREFIX.legacyRequired()) builder.appendLegacy(PREFIX.getLegacy());
+								else builder.append(PREFIX.getComponents());
 
-										.append(" the server")
-										.reset()
-										.color(GREEN)
+								builder.append(" To apply the changes ")
+								.color(GREEN)
 
-										.append("\n")
+								.append("reload")
+								.reset()
+								.color(YELLOW)
+								.bold(true)
+								.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, PREFIX.legacyRequired() ? TextComponent.fromLegacyText(ColorUtil.legacyGradient("Reload now", ChatColor.YELLOW, ChatColor.GREEN)) : new Text(ColorUtil.gradient("Reload now", YELLOW, GREEN))))
+								.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/reload confirm"))
 
-										.append(PREFIX.getComponents())
+								.append(" the server")
+								.reset()
+								.color(GREEN)
 
-										.append(" If the update is not active after reloading, please try to update manually.")
-										.reset()
-										.color(GREEN)
+								.append("\n");
 
-										.create()
-								);
+								if (PREFIX.legacyRequired()) builder.appendLegacy(PREFIX.getLegacy());
+								else builder.append(PREFIX.getComponents())
+
+								.append(" If the update is not active after reloading, please try to update manually.")
+								.reset()
+								.color(GREEN);
+
+								sender.spigot().sendMessage(builder.create());
 							}
 						}
 						else {
@@ -85,6 +87,11 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 										PREFIX, updater.getDownloadUrl()
 								));
 							} else {
+								BaseComponent[] hoverComponent = new ComponentBuilder("Realistic ").color(GREEN)
+										.append("Growth").color(AQUA)
+										.append(" | ").color(GRAY)
+										.append("SpigotMC").color(GOLD)
+										.create();
 								sender.spigot().sendMessage(new ComponentBuilder()
 										.append(PREFIX.getComponents())
 										.append(" Update failed.\n")
@@ -93,11 +100,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 										.append(" Please update manually by downloading the file from ")
 										.append("[SpigotMC]").color(YELLOW)
 										.event(new ClickEvent(ClickEvent.Action.OPEN_URL, updater.getDownloadUrl()))
-										.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new ComponentBuilder("Realistic ").color(GREEN)
-												.append("Growth").color(AQUA)
-												.append(" | ").color(GRAY)
-												.append("SpigotMC").color(GOLD)
-												.create())))
+										.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, PREFIX.legacyRequired() ? hoverComponent : new Text(hoverComponent)))
 										.create());
 							}
 							sender.sendMessage(ChatColor.RED + "Update failed. Please update manually");
