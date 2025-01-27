@@ -100,13 +100,15 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         if (minecraftVersion.checkVersion(1, 19, 0)) put(GroundCheck.checkMangroveGround(minecraftVersion), Material.MANGROVE_PROPAGULE);
 
-        put(GroundCheck.checkBambooGround(minecraftVersion), Material.BAMBOO_SAPLING, Material.BAMBOO);
+        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkBambooGround(minecraftVersion), Material.BAMBOO_SAPLING, Material.BAMBOO);
 
         put(GroundCheck.checkSugarGround(minecraftVersion), Material.SUGAR_CANE);
 
         put(GroundCheck.checkCactusGround(minecraftVersion), Material.CACTUS);
 
-        put(GroundCheck.checkFlowerGround(minecraftVersion), Material.DANDELION, Material.POPPY, Material.BLUE_ORCHID, Material.ALLIUM, Material.RED_TULIP, Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY, Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.WITHER_ROSE);
+        put(GroundCheck.checkFlowerGround(minecraftVersion), Material.DANDELION, Material.POPPY, Material.BLUE_ORCHID, Material.ALLIUM, Material.RED_TULIP, Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY);
+
+        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkFlowerGround(minecraftVersion), Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.WITHER_ROSE);
 
         put(GroundCheck.checkLargeFlowerGround(minecraftVersion), Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY);
 
@@ -126,10 +128,12 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         put(GroundCheck.checkBelow(minecraftVersion, Material.GRASS_BLOCK, Material.FARMLAND), Material.PUMPKIN_SEEDS, Material.MELON_SEEDS);
 
-        put(GroundCheck.checkBelow(minecraftVersion, Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL), Material.SWEET_BERRIES);
+        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkBelow(minecraftVersion, Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL), Material.SWEET_BERRIES);
 
-        replaces.put(Material.BAMBOO, Material.BAMBOO_SAPLING);
-        replaces.put(Material.SWEET_BERRIES, Material.SWEET_BERRY_BUSH);
+        if (minecraftVersion.checkVersion(1, 14, 0)) {
+            replaces.put(Material.BAMBOO, Material.BAMBOO_SAPLING);
+            replaces.put(Material.SWEET_BERRIES, Material.SWEET_BERRY_BUSH);
+        }
 
         registerLarge(Material.TALL_GRASS);
         registerLarge(Material.LARGE_FERN);

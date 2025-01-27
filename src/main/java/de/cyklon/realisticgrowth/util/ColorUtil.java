@@ -76,7 +76,7 @@ public class ColorUtil {
 	}
 
 	public static BaseComponent[] gradient(String text, Color color1, Color color2) {
-		ComponentBuilder builder = new ComponentBuilder();
+		ComponentBuilder builder = new ComponentBuilder("");
 		gradient(text, color1, color2, (c, color) -> {
 			builder.append(String.valueOf(c))
 					.reset();
@@ -145,7 +145,7 @@ public class ColorUtil {
 
 			@Override
 			public BaseComponent[] getComponents() {
-				ComponentBuilder builder = new ComponentBuilder();
+				ComponentBuilder builder = new ComponentBuilder("");
 				data.forEach((c, color) -> {
 					builder.append(String.valueOf(c))
 							.reset();

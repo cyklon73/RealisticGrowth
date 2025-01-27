@@ -46,7 +46,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 								%sIf the update is not active after reloading, please try to update manually.
 								""".formatted(ChatColor.GREEN, ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GREEN));
 							} else {
-								ComponentBuilder builder = new ComponentBuilder();
+								ComponentBuilder builder = new ComponentBuilder("");
 
 								if (PREFIX.legacyRequired()) builder.appendLegacy(PREFIX.getLegacy());
 								else builder.append(PREFIX.getComponents());
@@ -92,7 +92,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 										.append(" | ").color(GRAY)
 										.append("SpigotMC").color(GOLD)
 										.create();
-								sender.spigot().sendMessage(new ComponentBuilder()
+								sender.spigot().sendMessage(new ComponentBuilder("")
 										.append(PREFIX.getComponents())
 										.append(" Update failed.\n")
 										.color(RED)
