@@ -118,7 +118,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         put(GroundCheck.checkMushroomGround(minecraftVersion), Material.RED_MUSHROOM, Material.BROWN_MUSHROOM);
 
-        put(GroundCheck.checkNetherGround(minecraftVersion), Material.CRIMSON_FUNGUS, Material.WARPED_FUNGUS, Material.CRIMSON_ROOTS, Material.WARPED_ROOTS);
+        if (minecraftVersion.checkVersion(1, 16, 0)) put(GroundCheck.checkNetherGround(minecraftVersion), Material.CRIMSON_FUNGUS, Material.WARPED_FUNGUS, Material.CRIMSON_ROOTS, Material.WARPED_ROOTS);
 
         put(GroundCheck.checkCoralGround(minecraftVersion), Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_HORN_CORAL_FAN, Material.DEAD_TUBE_CORAL_FAN);
 
