@@ -126,7 +126,9 @@ public class GroundCheck {
 	}
 
 	public static GroundCheck checkNetherGround(MinecraftVersion version) {
-		return checkBelow(version, Material.NETHERRACK, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM, Material.SOUL_SOIL);
+		GroundCheck check = checkBelow(version, Material.NETHERRACK);
+		if (version.checkVersion(1, 16, 0)) check = check.or(checkBelow(version, Material.CRIMSON_NYLIUM, Material.WARPED_NYLIUM, Material.SOUL_SOIL));
+		return check;
 	}
 
 	public static GroundCheck checkCoralGround(MinecraftVersion version) {
