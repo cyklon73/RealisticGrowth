@@ -1,5 +1,6 @@
 package de.cyklon.realisticgrowth.util;
 
+import de.cyklon.realisticgrowth.RealisticGrowth;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.ChatColor;
@@ -175,6 +176,10 @@ public class ColorUtil {
 		BaseComponent[] getComponents();
 
 		String getLegacy();
+
+		default boolean legacyRequired() {
+			return !RealisticGrowth.getMinecraftVersion().checkVersion(1, 16, 0);
+		}
 
 	}
 
