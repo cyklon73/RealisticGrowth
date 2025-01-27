@@ -58,7 +58,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 								.reset()
 								.color(YELLOW)
 								.bold(true)
-								.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, PREFIX.legacyRequired() ? TextComponent.fromLegacyText(ColorUtil.legacyGradient("Reload now", ChatColor.YELLOW, ChatColor.GREEN)) : new Text(ColorUtil.gradient("Reload now", YELLOW, GREEN))))
+								.event(PREFIX.legacyRequired() ? new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(ColorUtil.legacyGradient("Reload now", ChatColor.YELLOW, ChatColor.GREEN))) : new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ColorUtil.gradient("Reload now", YELLOW, GREEN))))
 								.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/reload confirm"))
 
 								.append(" the server")
@@ -100,7 +100,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 										.append(" Please update manually by downloading the file from ")
 										.append("[SpigotMC]").color(YELLOW)
 										.event(new ClickEvent(ClickEvent.Action.OPEN_URL, updater.getDownloadUrl()))
-										.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, PREFIX.legacyRequired() ? hoverComponent : new Text(hoverComponent)))
+										.event(PREFIX.legacyRequired() ? new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent) : new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverComponent)))
 										.create());
 							}
 							sender.sendMessage(ChatColor.RED + "Update failed. Please update manually");
