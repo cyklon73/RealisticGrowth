@@ -50,7 +50,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     private boolean compatibilityMode;
 
-    private MinecraftVersion minecraftVersion;
+    private static MinecraftVersion minecraftVersion;
 
     private FileConfiguration config;
 
@@ -61,7 +61,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         //TODO compatibility to 1.13
-        this.minecraftVersion = parseMinecraftVersion();
+        minecraftVersion = parseMinecraftVersion();
 
         this.saveDefaultConfig();
 
@@ -289,7 +289,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         return MinecraftVersion.parseVersion(getServer().getBukkitVersion());
     }
 
-    public MinecraftVersion getMinecraftVersion() {
+    public static MinecraftVersion getMinecraftVersion() {
         return minecraftVersion;
     }
 }
