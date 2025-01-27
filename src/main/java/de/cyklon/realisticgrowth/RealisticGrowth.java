@@ -60,7 +60,6 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        //TODO compatibility to 1.13
         minecraftVersion = parseMinecraftVersion();
 
         this.saveDefaultConfig();
@@ -92,43 +91,43 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         if (replant_chance != 1 && replant_chance != 0) random = new Random();
 
-        put(GroundCheck.checkTreeGround(minecraftVersion), Material.OAK_SAPLING, Material.BIRCH_SAPLING, Material.ACACIA_SAPLING);
+        put(GroundCheck.checkTreeGround(), Material.OAK_SAPLING, Material.BIRCH_SAPLING, Material.ACACIA_SAPLING);
 
-        put(GroundCheck.checkTreeGround(minecraftVersion), GroundCheck.checkLargeTreeGround(minecraftVersion), Material.SPRUCE_SAPLING, Material.JUNGLE_SAPLING, Material.DARK_OAK_SAPLING);
+        put(GroundCheck.checkTreeGround(), GroundCheck.checkLargeTreeGround(), Material.SPRUCE_SAPLING, Material.JUNGLE_SAPLING, Material.DARK_OAK_SAPLING);
 
-        if (minecraftVersion.checkVersion(1, 21, 2)) putLarge(GroundCheck.checkLargeTreeGround(minecraftVersion), Material.PALE_OAK_SAPLING);
+        if (minecraftVersion.checkVersion(1, 21, 2)) putLarge(GroundCheck.checkLargeTreeGround(), Material.PALE_OAK_SAPLING);
 
-        if (minecraftVersion.checkVersion(1, 19, 0)) put(GroundCheck.checkMangroveGround(minecraftVersion), Material.MANGROVE_PROPAGULE);
+        if (minecraftVersion.checkVersion(1, 19, 0)) put(GroundCheck.checkMangroveGround(), Material.MANGROVE_PROPAGULE);
 
-        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkBambooGround(minecraftVersion), Material.BAMBOO_SAPLING, Material.BAMBOO);
+        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkBambooGround(), Material.BAMBOO_SAPLING, Material.BAMBOO);
 
-        put(GroundCheck.checkSugarGround(minecraftVersion), Material.SUGAR_CANE);
+        put(GroundCheck.checkSugarGround(), Material.SUGAR_CANE);
 
-        put(GroundCheck.checkCactusGround(minecraftVersion), Material.CACTUS);
+        put(GroundCheck.checkCactusGround(), Material.CACTUS);
 
-        put(GroundCheck.checkFlowerGround(minecraftVersion), Material.DANDELION, Material.POPPY, Material.BLUE_ORCHID, Material.ALLIUM, Material.RED_TULIP, Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY);
+        put(GroundCheck.checkFlowerGround(), Material.DANDELION, Material.POPPY, Material.BLUE_ORCHID, Material.ALLIUM, Material.RED_TULIP, Material.ORANGE_TULIP, Material.WHITE_TULIP, Material.PINK_TULIP, Material.OXEYE_DAISY);
 
-        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkFlowerGround(minecraftVersion), Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.WITHER_ROSE);
+        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkFlowerGround(), Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.WITHER_ROSE);
 
-        put(GroundCheck.checkLargeFlowerGround(minecraftVersion), Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY);
+        put(GroundCheck.checkLargeFlowerGround(), Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY);
 
-        put(GroundCheck.checkFlowerGround(minecraftVersion), Material.FERN);
+        put(GroundCheck.checkFlowerGround(), Material.FERN);
 
-        if (minecraftVersion.checkVersion(1, 20, 3)) put(GroundCheck.checkFlowerGround(minecraftVersion), Material.SHORT_GRASS);
+        if (minecraftVersion.checkVersion(1, 20, 3)) put(GroundCheck.checkFlowerGround(), Material.SHORT_GRASS);
 
-        put(GroundCheck.checkLargeFlowerGround(minecraftVersion), Material.LARGE_FERN, Material.TALL_GRASS);
+        put(GroundCheck.checkLargeFlowerGround(), Material.LARGE_FERN, Material.TALL_GRASS);
 
-        put(GroundCheck.checkMushroomGround(minecraftVersion), Material.RED_MUSHROOM, Material.BROWN_MUSHROOM);
+        put(GroundCheck.checkMushroomGround(), Material.RED_MUSHROOM, Material.BROWN_MUSHROOM);
 
-        if (minecraftVersion.checkVersion(1, 16, 0)) put(GroundCheck.checkNetherGround(minecraftVersion), Material.CRIMSON_FUNGUS, Material.WARPED_FUNGUS, Material.CRIMSON_ROOTS, Material.WARPED_ROOTS);
+        if (minecraftVersion.checkVersion(1, 16, 0)) put(GroundCheck.checkNetherGround(), Material.CRIMSON_FUNGUS, Material.WARPED_FUNGUS, Material.CRIMSON_ROOTS, Material.WARPED_ROOTS);
 
-        put(GroundCheck.checkCoralGround(minecraftVersion), Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_HORN_CORAL_FAN, Material.DEAD_TUBE_CORAL_FAN);
+        put(GroundCheck.checkCoralGround(), Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_FIRE_CORAL_FAN, Material.DEAD_HORN_CORAL_FAN, Material.DEAD_TUBE_CORAL_FAN);
 
-        put(GroundCheck.checkBelow(minecraftVersion, Material.FARMLAND), Material.WHEAT_SEEDS, Material.BEETROOT_SEEDS, Material.POTATO, Material.CARROT);
+        put(GroundCheck.checkBelow(Material.FARMLAND), Material.WHEAT_SEEDS, Material.BEETROOT_SEEDS, Material.POTATO, Material.CARROT);
 
-        put(GroundCheck.checkBelow(minecraftVersion, Material.GRASS_BLOCK, Material.FARMLAND), Material.PUMPKIN_SEEDS, Material.MELON_SEEDS);
+        put(GroundCheck.checkBelow(Material.GRASS_BLOCK, Material.FARMLAND), Material.PUMPKIN_SEEDS, Material.MELON_SEEDS);
 
-        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkBelow(minecraftVersion, Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL), Material.SWEET_BERRIES);
+        if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkBelow(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL), Material.SWEET_BERRIES);
 
         if (minecraftVersion.checkVersion(1, 14, 0)) {
             replaces.put(Material.BAMBOO, Material.BAMBOO_SAPLING);
