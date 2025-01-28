@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import static de.cyklon.realisticgrowth.RealisticGrowth.PREFIX;
 import static net.md_5.bungee.api.ChatColor.*;
 
-
+@Deprecated
 public class Updater {
 
 	private static final int RESOURCE_ID = 121462;
@@ -166,7 +166,8 @@ public class Updater {
 
 	private boolean shouldUpdate(MinecraftVersion newVersion, MinecraftVersion oldVersion)
 	{
-		return newVersion.getVersion() > oldVersion.getVersion();
+		//return newVersion.getVersion() > oldVersion.getVersion();
+		return false;
 	}
 
 	public boolean download() {
