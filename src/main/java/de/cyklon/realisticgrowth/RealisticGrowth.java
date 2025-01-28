@@ -1,10 +1,11 @@
 package de.cyklon.realisticgrowth;
 
 import de.cyklon.realisticgrowth.command.MainCommand;
-import de.cyklon.realisticgrowth.spigotmc.Updater;
+import de.cyklon.realisticgrowth.modrinth.Updater;
 import de.cyklon.realisticgrowth.util.ColorUtil;
 import de.cyklon.realisticgrowth.util.MinecraftVersion;
 import de.cyklon.realisticgrowth.util.Permission;
+import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -48,8 +49,10 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     private Updater updater;
 
+    @Getter
     private boolean compatibilityMode;
 
+    @Getter
     private static MinecraftVersion minecraftVersion;
 
     private FileConfiguration config;
@@ -79,7 +82,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         else getLogger().info("Start in normal mode");
 
         this.updater = new Updater(this);
-        if (config.getBoolean("check-updates", true)) updater.check();
+        if (config.getBoolean("check-updates", true)) updater.check(null);
 
         this.replant_chance = config.getInt("replant-chance", 90)/100d;
 
@@ -245,6 +248,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         if (p.hasPermission(Permission.UPDATE)) updater.check(p);
     }
 
+
     public static boolean isClassPresent(String className) {
         try {
             Class.forName(className);
@@ -256,10 +260,6 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     public static boolean isSpigot() {
         return isClassPresent("org.spigotmc.SpigotConfig");
-    }
-
-    public boolean isCompatibilityMode() {
-        return compatibilityMode;
     }
 
     @Override
@@ -292,7 +292,4 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
         return MinecraftVersion.parseVersion(getServer().getBukkitVersion());
     }
 
-    public static MinecraftVersion getMinecraftVersion() {
-        return minecraftVersion;
-    }
 }
