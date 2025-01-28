@@ -1,8 +1,9 @@
 package de.cyklon.realisticgrowth.command;
 
 import de.cyklon.realisticgrowth.RealisticGrowth;
+import de.cyklon.realisticgrowth.modrinth.Version;
 import de.cyklon.realisticgrowth.util.ColorUtil;
-import de.cyklon.realisticgrowth.spigotmc.Updater;
+import de.cyklon.realisticgrowth.modrinth.Updater;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -30,12 +31,12 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (args.length > 0 && args[0].equalsIgnoreCase("update")) {
-			if (!updater.hasChecked()) updater.check(true);
-			if (updater.shouldUpdate()) {
+			Version version = updater.getVersions().getLast();
+			if (updater.hasUpdate(version)) {
 				sender.sendMessage("%s %sUpdating%s"
 						.formatted(PREFIX, ChatColor.GREEN, ColorUtil.legacyGradient("...", new Color(0x55FF7D), new Color(0x3CEEFF))));
 				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-					boolean downloaded = updater.download();
+					boolean downloaded = updater.download(version);
 					Bukkit.getScheduler().runTask(plugin, () -> {
 						if (downloaded) {
 							sender.sendMessage(PREFIX.getLegacy() + ChatColor.GREEN + " Update Successfully");
@@ -80,17 +81,17 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 						else {
 							if (plugin.isCompatibilityMode()) {
 								sender.sendMessage("""
-                            %s %s Update failed. Please update manually by downloading the file from %s[SpigotMC] %s
+                            %s %s Update failed. Please update manually by downloading the file from %s[Modrinth] %s
                             %s %s
                             """.formatted(
-										PREFIX, ChatColor.RESET, ChatColor.YELLOW, ChatColor.RESET,
-										PREFIX, updater.getDownloadUrl()
+										PREFIX, ChatColor.RESET, ChatColor.GREEN, ChatColor.RESET,
+										PREFIX, version.getFiles()[0].getUrl()
 								));
 							} else {
 								BaseComponent[] hoverComponent = new ComponentBuilder("Realistic ").color(GREEN)
 										.append("Growth").color(AQUA)
 										.append(" | ").color(GRAY)
-										.append("SpigotMC").color(GOLD)
+										.append("Modrinth").color(GREEN)
 										.create();
 								sender.spigot().sendMessage(new ComponentBuilder("")
 										.append(PREFIX.getComponents())
@@ -98,8 +99,8 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 										.color(RED)
 										.append(PREFIX.getComponents())
 										.append(" Please update manually by downloading the file from ")
-										.append("[SpigotMC]").color(YELLOW)
-										.event(new ClickEvent(ClickEvent.Action.OPEN_URL, updater.getDownloadUrl()))
+										.append("[Modrinth]").color(GREEN)
+										.event(new ClickEvent(ClickEvent.Action.OPEN_URL, version.getFiles()[0].getUrl()))
 										.event(PREFIX.legacyRequired() ? new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent) : new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(hoverComponent)))
 										.create());
 							}
