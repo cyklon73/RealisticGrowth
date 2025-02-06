@@ -98,6 +98,8 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         put(GroundCheck.checkTreeGround(), GroundCheck.checkLargeTreeGround(), Material.SPRUCE_SAPLING, Material.JUNGLE_SAPLING, Material.DARK_OAK_SAPLING);
 
+        if (minecraftVersion.checkVersion(1, 20, 0)) put(GroundCheck.checkCherry(), Material.CHERRY_SAPLING);
+
         if (minecraftVersion.checkVersion(1, 21, 2)) putLarge(GroundCheck.checkLargeTreeGround(), Material.PALE_OAK_SAPLING);
 
         if (minecraftVersion.checkVersion(1, 19, 0)) put(GroundCheck.checkMangroveGround(), Material.MANGROVE_PROPAGULE);
