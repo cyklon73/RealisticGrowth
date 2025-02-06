@@ -43,9 +43,9 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 
 							if (plugin.isCompatibilityMode() || sender instanceof ConsoleCommandSender) {
 								updater.sendMessage(sender, """
-								%sTo apply the changes reload the server with %s/reload %sconfirm
+								%sTo apply the changes reload the server with %s/reload confirm
 								%sIf the update is not active after reloading, please try to update manually.
-								""".formatted(ChatColor.GREEN, ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GREEN));
+								""".formatted(ChatColor.GREEN, ChatColor.AQUA, ChatColor.GREEN));
 							} else {
 								ComponentBuilder builder = new ComponentBuilder("");
 
