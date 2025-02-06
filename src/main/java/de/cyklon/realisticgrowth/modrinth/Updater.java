@@ -87,10 +87,11 @@ public class Updater {
 	}
 
 	public void check(CommandSender sender) {
-		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+		RealisticGrowth.getScheduler().runTaskAsync(plugin, () -> {
 			Version newVersion = getVersions().getLast();
-			if (hasUpdate(newVersion)) Bukkit.getScheduler().runTask(plugin, () -> notify(newVersion, sender));
+			if (hasUpdate(newVersion)) RealisticGrowth.getScheduler().runTask(plugin, () -> notify(newVersion, sender));
 		});
+
 	}
 
 	public void notify(Version version, CommandSender sender) {
