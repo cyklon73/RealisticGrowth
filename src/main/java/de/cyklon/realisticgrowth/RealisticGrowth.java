@@ -5,6 +5,7 @@ import de.cyklon.realisticgrowth.modrinth.Updater;
 import de.cyklon.realisticgrowth.util.ColorUtil;
 import de.cyklon.realisticgrowth.util.MinecraftVersion;
 import de.cyklon.realisticgrowth.util.Permission;
+import de.cyklon.realisticgrowth.util.Scheduler;
 import lombok.Getter;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
@@ -42,6 +43,9 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
     public static final ColorUtil.GradientData PREFIX = ColorUtil.gradientData(ChatColor.GOLD, '[', "Realistic Growth", ChatColor.GOLD, ']', ChatColor.GREEN, ChatColor.AQUA);
 
     private static final String UPPER = "[half=upper]";
+
+    @Getter
+    private static final Scheduler scheduler = new Scheduler();
 
     private final Map<Material, SaplingData> saplings = new HashMap<>();
     private final Map<Material, Material> replaces = new HashMap<>();
@@ -262,6 +266,14 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
     public static boolean isSpigot() {
         return isClassPresent("org.spigotmc.SpigotConfig");
+    }
+
+    public static boolean isPaper() {
+        return isClassPresent("com.destroystokyo.paper.PaperConfig") || isClassPresent("io.papermc.paper.configuration.Configuration");
+    }
+
+    public static boolean isFolia() {
+        return isClassPresent("io.papermc.paper.threadedregions.RegionizedServer");
     }
 
     @Override

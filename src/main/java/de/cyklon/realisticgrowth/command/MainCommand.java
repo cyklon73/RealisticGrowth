@@ -7,7 +7,6 @@ import de.cyklon.realisticgrowth.modrinth.Updater;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 
@@ -35,9 +34,9 @@ public class MainCommand implements CommandExecutor, TabCompleter {
 			if (updater.hasUpdate(version)) {
 				sender.sendMessage("%s %sUpdating%s"
 						.formatted(PREFIX, ChatColor.GREEN, ColorUtil.legacyGradient("...", new Color(0x55FF7D), new Color(0x3CEEFF))));
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+				RealisticGrowth.getScheduler().runTaskAsync(plugin, () -> {
 					boolean downloaded = updater.download(version);
-					Bukkit.getScheduler().runTask(plugin, () -> {
+					RealisticGrowth.getScheduler().runTask(plugin, () -> {
 						if (downloaded) {
 							sender.sendMessage(PREFIX.getLegacy() + ChatColor.GREEN + " Update Successfully");
 
