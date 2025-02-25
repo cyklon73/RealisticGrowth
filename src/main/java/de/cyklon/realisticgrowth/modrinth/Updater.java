@@ -94,8 +94,10 @@ public class Updater {
 
 	}
 
-	public void notify(Version version, CommandSender sender) {
+	public void notify(Version v, CommandSender sender) {
 		String currentVersion = plugin.getDescription().getVersion();
+
+		String version = v.getVersion_number();
 
 		String msg = "";
 		if (plugin.isCompatibilityMode() || sender==null) {
@@ -140,7 +142,7 @@ public class Updater {
 			if (PREFIX.legacyRequired()) builder.appendLegacy(PREFIX.getLegacy());
 			else builder.append(PREFIX.getComponents());
 			builder.append(" New Version: ").color(GOLD)
-			.append(version.getVersion_number()).color(GREEN)
+			.append(version).color(GREEN)
 
 			.append("\n");
 			if (PREFIX.legacyRequired()) builder.appendLegacy(PREFIX.getLegacy());

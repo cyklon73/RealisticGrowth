@@ -136,6 +136,10 @@ public class GroundCheck {
 				.and((gc, l) -> checkAround(Material.WATER).test(gc, l.clone().add(0, 1, 0)));
 	}
 
+	public static GroundCheck checkCherry() {
+		return checkBelow(Material.GRASS_BLOCK, Material.DIRT, Material.COARSE_DIRT, Material.PODZOL, Material.MYCELIUM, Material.ROOTED_DIRT, Material.MOSS_BLOCK, Material.FARMLAND, Material.MUD, Material.MUDDY_MANGROVE_ROOTS);
+	}
+
 
 	private static BiPredicate<GroundCheck, Location> checkAround(Material material) {
 		return (gc, l) -> {
