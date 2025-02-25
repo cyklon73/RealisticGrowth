@@ -11,63 +11,62 @@ Realistic Growth brings a natural touch to your Minecraft world by allowing sapl
 - CraftBukkit
 - Spigot
 - Paper
+- Folia
 - Purpur
 - Other server implementations may work, but are not recommended as they may cause compatibility issues.
 
 # Supported Plants
-- Tree Saplings:
 
-  -  Oak Sapling
-  -  Birch Sapling
-  -  Acacia Sapling
-  -  Spruce Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
-  -  Jungle Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
-  -  Dark Oak Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
-  -  Mangrove Propagule
-  -  Pale Oak Sapling
+- **Tree Saplings**:
+  - Oak Sapling
+  - Birch Sapling
+  - Acacia Sapling
+  - Spruce Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
+  - Jungle Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
+  - Dark Oak Sapling: for stacks over 4 items also possible as 2x2 blocks wide tree
+  - Mangrove Propagule
+  - Pale Oak Sapling
+  - Cherry Sapling
 
-- Crops & Seeds:
+- **Crops & Seeds**:
+  - Wheat Seeds
+  - Beetroot Seeds
+  - Pumpkin Seeds
+  - Melon Seeds
+  - Sweet Berries
+  - Potato
+  - Carrot
 
-  -  Wheat Seeds
-  -  Beetroot Seeds
-  -  Pumpkin Seeds
-  -  Melon Seeds
-  -  Sweet Berries
- 
-- Flowers:
+- **Flowers**:
+  - Dandelion
+  - Poppy
+  - Blue Orchid
+  - Allium
+  - Red / Orange / White / Pink Tulip
+  - Oxeye Daisy
+  - Cornflower
+  - Lily of the Valley
+  - Wither Rose
+  - Sunflower
+  - Lilac
+  - Rose Bush
+  - Peony
+  - Short Grass
+  - Fern
 
-  -  Dandelion
-  -  Poppy
-  -  Blue Orchid
-  -  Allium
-  -  Red / Orange / White / Pink Tulip
-  -  Oxeye Daisy
-  -  Cornflower
-  -  Lily of the Valley
-  -  Wither Rose
-  -  Sunflower
-  -  Lilac
-  -  Rose bush
-  -  Peony
-
-- Other Plants:
-
-  -  Bamboo
-  -  Sugar Cane
-  -  Cactus
-  -  (Large) Fern
-  -  (Tall) Grass
-  -  Red / Brown Mushroom
-  -  Crimson / Warped Fungus
-  -  Crimson / Warped Roots
-  -  Pumpkin Seeds
-  -  Melon Seeds
-  -  Sweet Berries
-  -  Dead Coral Fan (All types)
-  -  Wheat seeds
-  -  Beetroot seeds
-  -  Potato
-  -  Carrot
+- **Other Plants**:
+  - Bamboo
+  - Bamboo Sapling
+  - Sugar Cane
+  - Cactus
+  - (Large) Fern
+  - (Tall) Grass
+  - Red / Brown Mushroom
+  - Crimson Fungus
+  - Warped Fungus
+  - Crimson Roots
+  - Warped Roots
+  - Dead Coral Fan (All types: Dead Brain, Dead Bubble, Dead Fire, Dead Horn, Dead Tube)
 
 ## Metrics collection
 Realistic Growth collects since Version 1.2 anonymous server statistics through bStats, an open-source statistics service for Minecraft software.
