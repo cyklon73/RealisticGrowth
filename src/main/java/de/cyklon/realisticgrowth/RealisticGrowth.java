@@ -95,6 +95,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         metrics.addCustomChart(new SimplePie("check-updates", () -> String.valueOf(config.getBoolean("check-updates"))));
         metrics.addCustomChart(new SimplePie("replant-chance", () -> String.valueOf(((int)(replant_chance*100d)))));
+        metrics.addCustomChart(new SimplePie("using-folia", () -> String.valueOf(isFolia())));
 
         if (replant_chance != 1 && replant_chance != 0) random = new Random();
 
