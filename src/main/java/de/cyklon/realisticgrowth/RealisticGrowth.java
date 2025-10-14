@@ -119,6 +119,8 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
 
         if (minecraftVersion.checkVersion(1, 14, 0)) put(GroundCheck.checkFlowerGround(), Material.CORNFLOWER, Material.LILY_OF_THE_VALLEY, Material.WITHER_ROSE);
 
+        if (minecraftVersion.checkVersion(1, 20, 4)) put(GroundCheck.checkFlowerGround(), Material.CLOSED_EYEBLOSSOM, Material.OPEN_EYEBLOSSOM);
+
         put(GroundCheck.checkLargeFlowerGround(), Material.SUNFLOWER, Material.LILAC, Material.ROSE_BUSH, Material.PEONY);
 
         put(GroundCheck.checkFlowerGround(), Material.FERN);
