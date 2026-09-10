@@ -306,7 +306,7 @@ public final class RealisticGrowth extends JavaPlugin implements Listener {
     }
 
     private MinecraftVersion parseMinecraftVersion() {
-        return MinecraftVersion.parseVersion(getServer().getBukkitVersion());
+        return MinecraftVersion.parseVersion(getServer().getMinecraftVersion());
     }
 
 }
