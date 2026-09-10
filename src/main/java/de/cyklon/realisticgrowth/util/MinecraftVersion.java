@@ -49,7 +49,6 @@ public class MinecraftVersion {
 	}
 
 	public static MinecraftVersion parseVersion(String version) {
-		version = version.substring(0, version.indexOf('-'));
 		String[] versions = version.split("\\.");
 		int baseVersion = Integer.parseInt(versions[0]);
 		int bigVersion = Integer.parseInt(versions[1]);
